@@ -14,19 +14,13 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="产品图片" prop="image">
-                  <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleAddSuccess" :before-upload="beforeAddUpload">
-                    <img v-if="formout.image" :src="formout.image" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                </el-form-item>
                 <el-form-item label="PO#" prop="poNum">
                   <el-input v-model="formout.poNum"></el-input>
                 </el-form-item>
                 <el-form-item label="ITEM" prop="item">
                   <el-input v-model="formout.item"></el-input>
                 </el-form-item>
-                <el-form-item label="镀金颜色" prop="color">
+                <el-form-item :required=true label="镀金颜色" prop="color">
                   <el-select v-model="formout.color" filterable placeholder="请选择">
                     <el-option v-for="item in colorOptions" :key="item.id" :label="item.itemName" :value="item.id">
                     </el-option>
@@ -38,7 +32,7 @@
                 <el-form-item :required=true label="单价" prop="price">
                   <el-input type=number v-model="formout.price"></el-input>
                 </el-form-item>
-                <el-form-item label="合计" prop="sum">
+                <el-form-item :required=true label="合计" prop="sum">
                   <el-input type=number v-model="formout.sum"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -62,12 +56,6 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="产品图片" prop="image">
-                  <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleUpdateSuccess" :before-upload="beforeUpdateUpload">
-                    <img v-if="formoutupdate.image" :src="formoutupdate.image" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                </el-form-item>
                 <el-form-item label="PO#" prop="poNum">
                   <el-input v-model="formoutupdate.poNum"></el-input>
                 </el-form-item>
@@ -86,7 +74,7 @@
                 <el-form-item :required=true label="单价" prop="price">
                   <el-input type=number v-model="formoutupdate.price"></el-input>
                 </el-form-item>
-                <el-form-item label="合计" prop="sum">
+                <el-form-item :required=true label="合计" prop="sum">
                   <el-input type=number v-model="formoutupdate.sum"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -141,10 +129,11 @@
       <div style="display:none;">
         <el-table id="print" ref="print" :data="tableData" @selection-change="onTableSelectChange">
           <el-table-column prop="customerName" label="客户名称" width=100> </el-table-column>
+          <el-table-column prop="code" label="编号" width=180> </el-table-column>
           <el-table-column prop="poNum" label="PO#" width=100> </el-table-column>
           <el-table-column prop="item" label="ITEM" width=100> </el-table-column>
           <el-table-column prop="color" label="镀金颜色" width=100> </el-table-column>
-          <el-table-column prop="count" label="数量" width=180> </el-table-column>
+          <el-table-column prop="count" label="数量" width=100> </el-table-column>
           <el-table-column prop="price" label="单价" width=80> </el-table-column>
           <el-table-column prop="sum" label="合计" width=80> </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width=100> </el-table-column>
@@ -154,17 +143,11 @@
         <el-table-column type="selection" width=60>
         </el-table-column>
         <el-table-column prop="customerName" label="客户名称" width=200> </el-table-column>
-        <el-table-column prop="image" label="产品图片" width=100>
-          <template slot-scope="scope">
-            <div style="width:50%;height:50%;">
-              <el-image :src="scope.row.image" :preview-src-list="[scope.row.image]"></el-image>
-            </div>
-          </template>
-        </el-table-column>
+        <el-table-column prop="code" label="编号" width=180> </el-table-column>
         <el-table-column prop="poNum" label="PO#" width=180> </el-table-column>
         <el-table-column prop="item" label="ITEM" width=180> </el-table-column>
-        <el-table-column prop="color" label="镀金颜色" width=100> </el-table-column>
-        <el-table-column prop="count" label="数量" width=180> </el-table-column>
+        <el-table-column prop="color" label="镀金颜色" width=180> </el-table-column>
+        <el-table-column prop="count" label="数量" width=100> </el-table-column>
         <el-table-column prop="price" label="单价" width=60> </el-table-column>
         <el-table-column prop="sum" label="合计" width=80> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=160> </el-table-column>
@@ -209,6 +192,13 @@ export default {
         callback();
       }
     };
+    var sum = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('不能为空'));
+      } else {
+        callback();
+      }
+    };
     return {
       tableData: [],
       customerNameSelect: '',
@@ -238,6 +228,10 @@ export default {
         }],
         price: [{
           validator: price,
+          trigger: 'blur'
+        }],
+        sum: [{
+          validator: sum,
           trigger: 'blur'
         }],
       },

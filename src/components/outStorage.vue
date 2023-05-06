@@ -4,62 +4,76 @@
     <el-col :span="24">
       <!-- 新建 -->
       <el-drawer :visible.sync="draweradd" :with-header="false" size='50%'>
-        <div style="padding: 4% 10%;">
+        <div style="padding: 2% 3%;">
           <el-tabs>
-            <el-tab-pane label="新增出库" style="margin-top:4%;overflow-y: scroll;" :style="{height: scrollerHeight}">
+            <el-tab-pane label="新增出库" style="margin-top:4%;padding: 0% 5%;overflow-y: scroll;" :style="{height: scrollerHeight}">
               <el-form ref="formout" :rules="rules" :model="formout" size="small">
-                <el-form-item label="客户名称" prop="customerName">
-                  <el-select v-model="formout.customerName" filterable placeholder="请选择">
-                    <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="产品图片" prop="image">
-                  <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleAddSuccess" :before-upload="beforeAddUpload">
-                    <img v-if="formout.image" :src="formout.image" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                </el-form-item>
-                <el-form-item label="品名" prop="name">
-                  <el-input v-model="formout.name"></el-input>
-                </el-form-item>
-                <el-form-item label="PO#" prop="poNum">
-                  <el-input v-model="formout.poNum"></el-input>
-                </el-form-item>
-                <el-form-item label="ITEM" prop="item">
-                  <el-input v-model="formout.item"></el-input>
-                </el-form-item>
-                <el-form-item label="镀金颜色" prop="color">
-                  <el-select v-model="formout.color" filterable placeholder="请选择">
-                    <el-option v-for="item in colorOptions" :key="item.id" :label="item.itemName" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="数量" prop="count">
-                  <el-input v-model="formout.count"></el-input>
-                </el-form-item>
-                <el-form-item label="总个数" prop="bunchCount">
-                  <el-input type=number v-model="formout.bunchCount"></el-input>
-                </el-form-item>
-                <el-form-item label="烤厅" prop="bake">
-                  <el-select v-model="formout.bake" filterable placeholder="请选择">
-                    <el-option v-for="item in bakeOptions" :key="item.id" :label="item.itemName" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item :required=true label="出库数量" prop="outCount">
-                  <el-input v-model="formout.outCount"></el-input>
-                </el-form-item>
-                <el-form-item label="单价" prop="price">
-                  <el-input type=number v-model="formout.price"></el-input>
-                </el-form-item>
-                <el-form-item label="合计" prop="sum">
-                  <el-input type=number v-model="formout.sum"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="submitForm()">提交</el-button>
-                  <el-button @click="resetForm('formout')">重置</el-button>
-                </el-form-item>
+                <el-card>
+                  <i class="el-icon-s-order drawer-hard">订单及入库信息</i>
+                  <el-divider> </el-divider>
+                  <el-form-item :required=true label="入库编号" prop="inStorageId">
+                    <el-select v-model="formout.inStorageId" filterable remote reserve-keyword placeholder="请输入订单编号" :remote-method="getInStorageByCode" :loading="inStorageLoading" @change="inStorageCodeChange">
+                      <el-option v-for="item in inStorageOptions" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="客户名称" prop="customerName">
+                    <el-select v-model="formout.customerName" filterable placeholder="请选择" disabled>
+                      <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="品名" prop="name">
+                    <el-input v-model="formout.name" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="PO#" prop="poNum">
+                    <el-input v-model="formout.poNum" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="ITEM" prop="item">
+                    <el-input v-model="formout.item" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="总订单量" prop="count">
+                    <el-input v-model="formout.count" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="产品图片" prop="image">
+                    <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleAddSuccess" :before-upload="beforeAddUpload" disabled>
+                      <img v-if="formout.image" :src="formout.image" class="avatar" />
+                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                  </el-form-item>
+                  <el-form-item label="镀金颜色" prop="color">
+                    <el-select v-model="formout.color" filterable placeholder="请选择" disabled>
+                      <el-option v-for="item in colorOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="烤厅" prop="bake">
+                    <el-select v-model="formout.bake" filterable placeholder="请选择" disabled>
+                      <el-option v-for="item in bakeOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-card>
+                <el-card style="margin-top:3%;">
+                  <i class="el-icon-s-order drawer-hard">出库信息</i>
+                  <el-divider> </el-divider>
+                  <el-form-item :required=true label="总个数" prop="bunchCount">
+                    <el-input type=number v-model="formout.bunchCount"></el-input>
+                  </el-form-item>
+                  <el-form-item :required=true label="出库数量" prop="outCount">
+                    <el-input v-model="formout.outCount"></el-input>
+                  </el-form-item>
+                  <el-form-item :required=true label="出库类型" prop="outType">
+                    <el-select v-model="formout.outType" filterable placeholder="请选择">
+                      <el-option v-for="item in outTypeOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="submitForm()">提交</el-button>
+                    <el-button @click="resetForm('formout')">重置</el-button>
+                  </el-form-item>
+                </el-card>
               </el-form>
             </el-tab-pane>
           </el-tabs>
@@ -67,58 +81,72 @@
       </el-drawer>
       <!-- 详情 -->
       <el-drawer :visible.sync="drawerupdate" :with-header="false" size='50%'>
-        <div style="padding: 4% 10%;">
+        <div style="padding: 2% 3%;">
           <el-tabs>
-            <el-tab-pane label="编辑出库" style="margin-top:4%;overflow-y: scroll;" :style="{height: scrollerHeight}">
+            <el-tab-pane label="编辑出库" style="margin-top:4%;padding: 0% 5%;overflow-y: scroll;" :style="{height: scrollerHeight}">
               <el-form ref="formoutupdate" :rules="rules" :model="formoutupdate" size="small">
-                <el-form-item label="客户名称" prop="customerName">
-                  <el-select v-model="formoutupdate.customerNameId" filterable placeholder="请选择">
-                    <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="产品图片" prop="image">
-                  <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleUpdateSuccess" :before-upload="beforeUpdateUpload">
-                    <img v-if="formoutupdate.image" :src="formoutupdate.image" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                </el-form-item>
-                <el-form-item label="品名" prop="name">
-                  <el-input v-model="formoutupdate.name"></el-input>
-                </el-form-item>
-                <el-form-item label="PO#" prop="poNum">
-                  <el-input v-model="formoutupdate.poNum"></el-input>
-                </el-form-item>
-                <el-form-item label="ITEM" prop="item">
-                  <el-input v-model="formoutupdate.item"></el-input>
-                </el-form-item>
-                <el-form-item label="镀金颜色" prop="color">
-                  <el-select v-model="formoutupdate.colorId" filterable placeholder="请选择">
-                    <el-option v-for="item in colorOptions" :key="item.id" :label="item.itemName" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="数量" prop="count">
-                  <el-input v-model="formoutupdate.count"></el-input>
-                </el-form-item>
-                <el-form-item label="总个数" prop="bunchCount">
-                  <el-input type=number v-model="formoutupdate.bunchCount"></el-input>
-                </el-form-item>
-                <el-form-item label="烤厅" prop="bake">
-                  <el-select v-model="formoutupdate.bakeId" filterable placeholder="请选择">
-                    <el-option v-for="item in bakeOptions" :key="item.id" :label="item.itemName" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item :required=true label="出库数量" prop="outCount">
-                  <el-input v-model="formoutupdate.outCount"></el-input>
-                </el-form-item>
-                <el-form-item label="单价" prop="price">
-                  <el-input type=number v-model="formoutupdate.price"></el-input>
-                </el-form-item>
-                <el-form-item label="合计" prop="sum">
-                  <el-input type=number v-model="formoutupdate.sum"></el-input>
-                </el-form-item>
+                <el-card>
+                  <i class="el-icon-s-order drawer-hard">订单及入库信息</i>
+                  <el-divider> </el-divider>
+                  <el-form-item :required=true label="入库编号" prop="inStorageCode">
+                    <el-select v-model="formoutupdate.inStorageCode" filterable remote reserve-keyword placeholder="请输入订单编号" :remote-method="getInStorageByCode" :loading="inStorageLoading" @change="inStorageCodeChange">
+                      <el-option v-for="item in inStorageOptions" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="客户名称" prop="customerName">
+                    <el-select v-model="formoutupdate.customerNameId" filterable placeholder="请选择" disabled>
+                      <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="品名" prop="name">
+                    <el-input v-model="formoutupdate.name" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="PO#" prop="poNum">
+                    <el-input v-model="formoutupdate.poNum" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="ITEM" prop="item">
+                    <el-input v-model="formoutupdate.item" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="订单总量" prop="count">
+                    <el-input v-model="formoutupdate.count" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="产品图片" prop="image">
+                    <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleUpdateSuccess" :before-upload="beforeUpdateUpload" disabled>
+                      <img v-if="formoutupdate.image" :src="formoutupdate.image" class="avatar" />
+                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                  </el-form-item>
+                  <el-form-item label="镀金颜色" prop="color">
+                    <el-select v-model="formoutupdate.colorId" filterable placeholder="请选择" disabled>
+                      <el-option v-for="item in colorOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="烤厅" prop="bakeId">
+                    <el-select v-model="formoutupdate.bakeId" filterable placeholder="请选择" disabled>
+                      <el-option v-for="item in bakeOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-card>
+                <el-card style="margin-top:3%;">
+                  <i class="el-icon-s-order drawer-hard">出库信息</i>
+                  <el-divider> </el-divider>
+                  <el-form-item :required=true label="总个数" prop="bunchCount">
+                    <el-input type=number v-model="formoutupdate.bunchCount"></el-input>
+                  </el-form-item>
+                  <el-form-item :required=true label="出库数量" prop="outCount">
+                    <el-input v-model="formoutupdate.outCount"></el-input>
+                  </el-form-item>
+                  <el-form-item :required=true label="出库类型" prop="outType">
+                    <el-select v-model="formoutupdate.outType" filterable placeholder="请选择">
+                      <el-option v-for="item in outTypeOptions" :key="item.id" :label="item.itemName" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-card>
                 <el-form-item>
                   <el-button type="primary" @click="submitFormUpdate()">提交修改</el-button>
                 </el-form-item>
@@ -127,7 +155,6 @@
           </el-tabs>
         </div>
       </el-drawer>
-
     </el-col>
   </el-row>
   <el-row class="row selectrow">
@@ -171,23 +198,23 @@
       <div style="display:none;">
         <el-table id="print" ref="print" :data="tableData" @selection-change="onTableSelectChange">
           <el-table-column prop="customerName" label="客户名称" width=100> </el-table-column>
+          <el-table-column prop="code" label="编号" width=100> </el-table-column>
           <el-table-column prop="name" label="品名" width=50> </el-table-column>
           <el-table-column prop="poNum" label="PO#" width=100> </el-table-column>
           <el-table-column prop="item" label="ITEM" width=100> </el-table-column>
           <el-table-column prop="color" label="镀金颜色" width=50> </el-table-column>
-          <el-table-column prop="count" label="数量" width=50> </el-table-column>
-          <el-table-column prop="bunchCount" label="总个数" width=80> </el-table-column>
           <el-table-column prop="bake" label="烤厅" width=50> </el-table-column>
+          <el-table-column prop="count" label="总订单量" width=50> </el-table-column>
+          <el-table-column prop="outType" label="出库类型" width=50> </el-table-column>
+          <el-table-column prop="bunchCount" label="总个数" width=80> </el-table-column>
           <el-table-column prop="outCount" label="出库数量" width=80> </el-table-column>
-          <el-table-column prop="price" label="单价" width=80> </el-table-column>
-          <el-table-column prop="sum" label="合计" width=80> </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width=100> </el-table-column>
         </el-table>
       </div>
       <el-table :data="tableData" :height="autoheight" @selection-change="onTableSelectChange">
         <el-table-column type="selection" width=60>
         </el-table-column>
-        <el-table-column prop="customerName" label="客户名称" width=200> </el-table-column>
+        <el-table-column prop="customerName" label="客户名称" width=140> </el-table-column>
         <el-table-column prop="image" label="产品图片" width=100>
           <template slot-scope="scope">
             <div style="width:50%;height:50%;">
@@ -195,16 +222,16 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="品名" width=200> </el-table-column>
+        <el-table-column prop="code" label="编号" width=140> </el-table-column>
+        <el-table-column prop="name" label="品名" width=140> </el-table-column>
         <el-table-column prop="poNum" label="PO#" width=180> </el-table-column>
         <el-table-column prop="item" label="ITEM" width=180> </el-table-column>
         <el-table-column prop="color" label="镀金颜色" width=100> </el-table-column>
-        <el-table-column prop="count" label="数量" width=60> </el-table-column>
-        <el-table-column prop="bunchCount" label="总个数" width=70> </el-table-column>
         <el-table-column prop="bake" label="烤厅" width=60> </el-table-column>
+        <el-table-column prop="count" label="总订单量" width=100> </el-table-column>
+        <el-table-column prop="outType" label="出库类型" width=80> </el-table-column>
+        <el-table-column prop="bunchCount" label="总个数" width=70> </el-table-column>
         <el-table-column prop="outCount" label="出库数量" width=80> </el-table-column>
-        <el-table-column prop="price" label="单价" width=60> </el-table-column>
-        <el-table-column prop="sum" label="合计" width=80> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=160> </el-table-column>
         <el-table-column label="操作" width=80>
           <template slot-scope="scope">
@@ -244,8 +271,103 @@ export default {
       customerNameOptions: [],
       colorOptions: [],
       bakeOptions: [],
-      formout: {},
-      formoutupdate: {},
+      inStorageOptions: [],
+      outTypeOptions: [
+        {
+          id: "1",
+          itemName: "正常出库"
+        },{
+          id: "2",
+          itemName: "来料异常"
+        },{
+          id: "3",
+          itemName: "工作损耗"
+        },{
+          id: "4",
+          itemName: "其他"
+        }
+      ],
+      formmodule:{
+        id: "",
+        tempInStorageId: "",
+        inStorageId: "",
+        inStorageCode: "",
+        code: "",
+        customerName: "",
+        customerNameId: "",
+        image: "",
+        name: "",
+        poNum: "",
+        item: "",
+        color: "",
+        colorId: "",
+        count: "",
+        bunchCount: "",
+        bake: "",
+        bakeId: "",
+        outCount: "",
+        outType: "",
+        outTypeId: "",
+        incomingType: "",
+        incomingTypeId: "",
+        createTime: "",
+        modifiedTime: "",
+        isDelete: "",
+      },
+      formout: {
+        id: "",
+        tempInStorageId: "",
+        inStorageId: "",
+        inStorageCode: "",
+        code: "",
+        customerName: "",
+        customerNameId: "",
+        image: "",
+        name: "",
+        poNum: "",
+        item: "",
+        color: "",
+        colorId: "",
+        count: "",
+        bunchCount: "",
+        bake: "",
+        bakeId: "",
+        outCount: "",
+        outType: "",
+        outTypeId: "",
+        incomingType: "",
+        incomingTypeId: "",
+        createTime: "",
+        modifiedTime: "",
+        isDelete: "",
+      },
+      formoutupdate: {
+        id: "",
+        tempInStorageId: "",
+        inStorageId: "",
+        inStorageCode: "",
+        code: "",
+        customerName: "",
+        customerNameId: "",
+        image: "",
+        name: "",
+        poNum: "",
+        item: "",
+        color: "",
+        colorId: "",
+        count: "",
+        bunchCount: "",
+        bake: "",
+        bakeId: "",
+        outCount: "",
+        outType: "",
+        outTypeId: "",
+        incomingType: "",
+        incomingTypeId: "",
+        createTime: "",
+        modifiedTime: "",
+        isDelete: "",
+      },
       pageIndex: 1,
       pageSize: 50,
       totalRowCount: 0,
@@ -255,6 +377,7 @@ export default {
       time: [],
       draweradd: false,
       drawerupdate: false,
+      inStorageLoading: false,
       print: {
         id: 'print',
         popTitle: '出库单',
@@ -417,9 +540,11 @@ export default {
                   type: 'error'
                 });
               }
+              this.formout = this.formmodule
             })
             .catch(function(error) {
               console.log(error)
+              this.formout = this.formmodule
             })
         }
       })
@@ -427,6 +552,9 @@ export default {
     submitFormUpdate() {
       this.$refs['formoutupdate'].validate((valid) => {
         if (valid) {
+          if (typeof this.formoutupdate.tempInStorageId != "undefined") {
+            this.formoutupdate.inStorageId = this.formoutupdate.tempInStorageId
+          }
           axios
             .put(this.global.apiUrl + 'outStorage', this.formoutupdate, {
               headers: {
@@ -449,9 +577,11 @@ export default {
                   type: 'error'
                 });
               }
+              this.formoutupdate = this.formmodule
             })
             .catch(function(error) {
               console.log(error)
+              this.formoutupdate = this.formmodule
             })
         }
       })
@@ -538,6 +668,68 @@ export default {
       }
       //return isJPG && isLt2M;
       return isLt2M;
+    },
+    getInStorageByCode(code) {
+      axios
+        .get(this.global.apiUrl + 'inStorage/code', {
+          params: {
+            code: code
+          }
+        })
+        .then(res => {
+          if (res.data.s == 0) {
+            this.inStorageOptions = res.data.rs
+            this.inStorageLoading = false
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.data.rs,
+              type: 'error'
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    inStorageCodeChange(inStorageId) {
+      this.formoutupdate.tempInStorageId = this.formoutupdate.inStorageCode
+      axios
+        .get(this.global.apiUrl + 'inStorage/id', {
+          params: {
+            id: inStorageId
+          }
+        })
+        .then(res => {
+          if (res.data.s == 0) {
+            this.formout.customerName = res.data.rs.customerName
+            this.formout.poNum = res.data.rs.poNum
+            this.formout.item = res.data.rs.item
+            this.formout.count = res.data.rs.count
+            this.formout.name = res.data.rs.name
+            this.formout.image = res.data.rs.image
+            this.formout.color = res.data.rs.color
+            this.formout.bake = res.data.rs.bake
+
+            this.formoutupdate.customerNameId = res.data.rs.customerName
+            this.formoutupdate.poNum = res.data.rs.poNum
+            this.formoutupdate.item = res.data.rs.item
+            this.formoutupdate.count = res.data.rs.count
+            this.formoutupdate.name = res.data.rs.name
+            this.formoutupdate.image = res.data.rs.image
+            this.formoutupdate.colorId = res.data.rs.color
+            this.formoutupdate.bakeId = res.data.rs.bake
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.data.rs,
+              type: 'error'
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
     }
   }
 }
@@ -600,5 +792,11 @@ export default {
 .selectrow {
   vertical-align: middle;
   line-height: 40px;
+}
+
+.drawer-hard {
+  font-size: 24px;
+  color: #909399;
+  font-weight: bold;
 }
 </style>
