@@ -2,7 +2,7 @@
 <div id="app">
   <el-container direction="vertical">
     <el-header class="title">同庆工艺品有限公司</el-header>
-    <el-container direction="horizontal">
+    <el-container direction="horizontal" >
       <el-aside width=10% class="self-menu">
         <el-menu default-active="/order" router style="border-right: solid 0px #ffffff;">
           <el-menu-item index="/order">
@@ -43,9 +43,11 @@ export default {
   name: 'App',
   data() {
     return {
-      activeIndex: '/'
+      activeIndex: '/',
+      autoheight: 0
     }
-  }
+  },
+  created(){}
 }
 </script>
 

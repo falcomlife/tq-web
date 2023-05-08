@@ -11,8 +11,8 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "echarts": "4.8.0",
-    "element-ui": "^2.14.1",
-    "vue": "^2.6.12",
+    "element-ui": "^2.15.7",
+    "vue": "^2.15.7",
     "vue-print-nb": "^1.7.5",
     "vue-router": "^3.4.9"
   },

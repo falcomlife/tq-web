@@ -69,6 +69,15 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
+                  <el-form-item label="出库编号" prop="outStorageId" v-if="formout.incomingType==5">
+                    <el-select v-model="formout.outStorageId" filterable remote reserve-keyword placeholder="请输入订单编号" :remote-method="getOutStorageByCode" :loading="outStorageLoading" @change="outStorageCodeChange">
+                      <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="返镀原因" prop="incomingReason" v-if="formout.incomingType==5">
+                    <el-input v-model="formout.incomingReason"></el-input>
+                  </el-form-item>
                   <el-form-item :required=true label="总个数" prop="bunchCount">
                     <el-input type=number v-model="formout.bunchCount"></el-input>
                   </el-form-item>
@@ -158,6 +167,15 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
+                  <el-form-item label="出库编号" prop="outStorageCode" v-if="formoutupdate.incomingTypeId==5">
+                    <el-select v-model="formoutupdate.outStorageCode" filterable remote reserve-keyword placeholder="请输入订单编号" :remote-method="getOutStorageByCode" :loading="outStorageLoading" @change="outStorageCodeChange">
+                      <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="返镀原因" prop="incomingReason" v-if="formoutupdate.incomingTypeId==5">
+                    <el-input v-model="formoutupdate.incomingReason"></el-input>
+                  </el-form-item>
                   <el-form-item :required=true label="总个数" prop="bunchCount">
                     <el-input type=number v-model="formoutupdate.bunchCount"></el-input>
                   </el-form-item>
@@ -214,28 +232,39 @@
   <el-row class="row">
     <el-col :span="24">
       <div style="display:none;">
-        <el-table id="print" ref="print" :data="tableDataPrint" @selection-change="onTableSelectChange">
-          <el-table-column prop="customerName" label="客户名称" width=80> </el-table-column>
-          <el-table-column prop="image" label="产品图片" width=80>
-            <template slot-scope="scope">
-              <div style="width:50%;height:50%;">
-                <el-image :src="scope.row.image" :preview-src-list="[scope.row.image]"></el-image>
+        <div id="print" ref="print">
+          <div v-for="(item) in tableDataPrint" style="float: left;width: 50%;" :style="{height: printCellHeight}" :key="item.id">
+            <div style="padding: 1% 1%;">
+              <div>
+                <div style="float:left;width:50%;">
+                  <el-image :src="item.image"></el-image>
+                </div>
+                <div style="float:left;width:45%;margin-left:5%;">
+                  <el-descriptions :size="mini" column="1" content-class-name="self-descriptions-item">
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="编号">{{item.code}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="品名">{{item.name}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库镀金颜色">{{item.color}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="烤厅">{{item.bake}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总个数">{{item.bunchCount}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库数量">{{item.inCount}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="来料类别">
+                      <el-tag size="small">{{item.incomingType}}</el-tag>
+                    </el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="创建时间">{{item.createTime}}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
+                <div>
+                  <el-descriptions :size="mini" column="3" content-class-name="self-descriptions-item">
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="客户名称">{{item.customerName}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="PO#">{{item.poNum}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="ITEM">{{item.item}}</el-descriptions-item>
+                    <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总订单量">{{item.count}}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
               </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="code" label="编号" width=80> </el-table-column>
-          <el-table-column prop="name" label="品名" width=50> </el-table-column>
-          <el-table-column prop="poNum" label="PO#" width=80> </el-table-column>
-          <el-table-column prop="item" label="ITEM" width=80> </el-table-column>
-          <el-table-column prop="orderColor" label="订单镀金颜色" width=50> </el-table-column>、
-          <el-table-column prop="color" label="入库镀金颜色" width=100> </el-table-column>
-          <el-table-column prop="bake" label="烤厅" width=50> </el-table-column>
-          <el-table-column prop="count" label="总订单量" width=80> </el-table-column>
-          <el-table-column prop="bunchCount" label="总个数" width=80> </el-table-column>
-          <el-table-column prop="inCount" label="入库数量" width=60> </el-table-column>
-          <el-table-column prop="incomingType" label="来料类别" width=60> </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width=80> </el-table-column>
-        </el-table>
+            </div>
+          </div>
+        </div>
       </div>
       <el-table :data="tableData" :height="autoheight" @selection-change="onTableSelectChange">
         <el-table-column type="selection" width=60>
@@ -340,6 +369,13 @@ export default {
         callback();
       }
     };
+    var outStorageCode = (rule, value, callback) => {
+      if (!value && this.formout.incomingType == 5) {
+        return callback(new Error('不能为空'));
+      } else {
+        callback();
+      }
+    };
     return {
       tableData: [],
       tableDataPrint: [],
@@ -349,6 +385,7 @@ export default {
       bakeOptions: [],
       incomingTypeOptions: [],
       orderOptions: [],
+      outStorageCodeOptions: [],
       formmodule: {
         id: "",
         tempOrderId: "",
@@ -440,6 +477,7 @@ export default {
       draweradd: false,
       drawerupdate: false,
       orderLoading: false,
+      outStorageLoading: false,
       print: {
         id: 'print',
         popTitle: '入库单',
@@ -472,6 +510,10 @@ export default {
         }],
         incomingType: [{
           validator: incomingType,
+          trigger: 'blur'
+        }],
+        outStorageCode: [{
+          validator: outStorageCode,
           trigger: 'blur'
         }],
       },
@@ -514,6 +556,9 @@ export default {
   computed: {
     scrollerHeight: function() {
       return (window.innerHeight - 100) + 'px'; //自定义高度需求
+    },
+    printCellHeight: function() {
+      return (window.innerHeight - 200) / 2 + 'px'; //自定义高度需求
     }
   },
   methods: {
@@ -670,6 +715,9 @@ export default {
         if (valid) {
           if (typeof this.formoutupdate.tempOrderId != "undefined") {
             this.formoutupdate.orderId = this.formoutupdate.tempOrderId
+          }
+          if (typeof this.formoutupdate.tempOutStorageId != "undefined") {
+            this.formoutupdate.outStorageId = this.formoutupdate.tempOutStorageId
           }
           axios
             .put(this.global.apiUrl + 'inStorage', this.formoutupdate, {
@@ -842,7 +890,33 @@ export default {
         .catch(function(error) {
           console.log(error)
         })
-    }
+    },
+    getOutStorageByCode(code) {
+      axios
+        .get(this.global.apiUrl + 'outStorage/code', {
+          params: {
+            code: code
+          }
+        })
+        .then(res => {
+          if (res.data.s == 0) {
+            this.outStorageCodeOptions = res.data.rs
+            this.outStorageLoading = false
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.data.rs,
+              type: 'error'
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    outStorageCodeChange() {
+      this.formoutupdate.tempOutStorageId = this.formoutupdate.outStorageCode
+    },
   }
 }
 </script>
@@ -910,5 +984,14 @@ export default {
   font-size: 24px;
   color: #909399;
   font-weight: bold;
+}
+
+.self-descriptions-item {
+  font-size: 5px;
+  padding-bottom: 2px;
+}
+
+.el-descriptions-item__cell {
+  padding-bottom: 2px;
 }
 </style>

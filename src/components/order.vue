@@ -27,7 +27,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item :required=true label="数量" prop="count">
-                  <el-input v-model="formout.count"></el-input>
+                  <el-input type=number v-model="formout.count"></el-input>
                 </el-form-item>
                 <el-form-item :required=true label="单价" prop="price">
                   <el-input type=number v-model="formout.price"></el-input>
@@ -69,7 +69,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item :required=true label="数量" prop="count">
-                  <el-input v-model="formoutupdate.count"></el-input>
+                  <el-input type=number v-model="formoutupdate.count"></el-input>
                 </el-form-item>
                 <el-form-item :required=true label="单价" prop="price">
                   <el-input type=number v-model="formoutupdate.price"></el-input>
@@ -142,12 +142,21 @@
       <el-table :data="tableData" :height="autoheight" @selection-change="onTableSelectChange">
         <el-table-column type="selection" width=60>
         </el-table-column>
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <expandRow :order=scope.row :expandType="'inStorageByOrder'"></expandRow>
+          </template>
+        </el-table-column>
         <el-table-column prop="customerName" label="客户名称" width=200> </el-table-column>
         <el-table-column prop="code" label="编号" width=180> </el-table-column>
         <el-table-column prop="poNum" label="PO#" width=180> </el-table-column>
         <el-table-column prop="item" label="ITEM" width=180> </el-table-column>
         <el-table-column prop="color" label="镀金颜色" width=180> </el-table-column>
         <el-table-column prop="count" label="数量" width=100> </el-table-column>
+        <el-table-column prop="replatCount" label="返镀数量" width=100 label-class-name="table-col-label-analy" class-name="table-col-analy"> </el-table-column>
+        <el-table-column prop="replatRatio" label="返镀比率(%)" label-class-name="table-col-label-analy" class-name="table-col-analy" width=100> </el-table-column>
+        <el-table-column prop="incomingCount" label="来料异常数量" label-class-name="table-col-label-analy" class-name="table-col-analy" width=110></el-table-column>
+        <el-table-column prop="incomingRatio" label="来料异常比率(%)" label-class-name="table-col-label-analy" class-name="table-col-analy" width=130></el-table-column>
         <el-table-column prop="price" label="单价" width=60> </el-table-column>
         <el-table-column prop="sum" label="合计" width=80> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=160> </el-table-column>
@@ -170,6 +179,7 @@
 
 <script>
 import axios from 'axios'
+import expandRow from './expandRow'
 
 export default {
   name: 'order',
@@ -264,6 +274,9 @@ export default {
         }]
       }
     }
+  },
+  components: {
+    expandRow
   },
   created() {
     this.getList()
@@ -570,5 +583,11 @@ export default {
 .selectrow {
   vertical-align: middle;
   line-height: 40px;
+}
+.table-col-analy{
+  color: #ff0000;
+}
+.table-col-label-analy{
+  color: #909399;
 }
 </style>
