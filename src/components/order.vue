@@ -26,13 +26,16 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item :required=true label="数量" prop="count">
-                  <el-input type=number v-model="formout.count"></el-input>
+                <el-form-item label="数量" prop="count">
+                  <el-input type=number v-model="formout.count" @change="formoutValueChange"></el-input>
                 </el-form-item>
-                <el-form-item :required=true label="单价" prop="price">
-                  <el-input type=number v-model="formout.price"></el-input>
+                <el-form-item label="组件数量" prop="partSumCount">
+                  <el-input type=number v-model="formout.partSumCount"></el-input>
                 </el-form-item>
-                <el-form-item :required=true label="合计" prop="sum">
+                <el-form-item label="单价" prop="price">
+                  <el-input type=number v-model="formout.price" @change="formoutValueChange"></el-input>
+                </el-form-item>
+                <el-form-item label="合计" prop="sum">
                   <el-input type=number v-model="formout.sum"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -68,13 +71,16 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item :required=true label="数量" prop="count">
-                  <el-input type=number v-model="formoutupdate.count"></el-input>
+                <el-form-item label="数量" prop="count">
+                  <el-input type=number v-model="formoutupdate.count" @change="formoutupdateValueChange"></el-input>
                 </el-form-item>
-                <el-form-item :required=true label="单价" prop="price">
-                  <el-input type=number v-model="formoutupdate.price"></el-input>
+                <el-form-item label="组件数量" prop="partSumCount">
+                  <el-input type=number v-model="formoutupdate.partSumCount"></el-input>
                 </el-form-item>
-                <el-form-item :required=true label="合计" prop="sum">
+                <el-form-item label="单价" prop="price">
+                  <el-input type=number v-model="formoutupdate.price" @change="formoutupdateValueChange"></el-input>
+                </el-form-item>
+                <el-form-item label="合计" prop="sum">
                   <el-input type=number v-model="formoutupdate.sum"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -90,24 +96,31 @@
   </el-row>
   <el-row class="row selectrow">
     <el-col :span="2">
-      <span class="selectlable">客户名称：</span>
+      <span class="selectlable">客户名称</span>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="4">
       <el-select v-model="customerNameSelect" clearable filterable placeholder="请选择">
         <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
         </el-option>
       </el-select>
     </el-col>
-    <el-col :span="2">
-      <span class="selectlable">时间范围：</span>
+    <el-col :span="1">
+      <span class="selectlable">编号</span>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="4">
+      <el-input style="width:82%;" v-model="codeSelect" placeholder="请输入编号" clearable></el-input>
+    </el-col>
+    <el-col :span="2">
+      <span class="selectlable">时间范围</span>
+    </el-col>
+    <el-col :span="5">
       <div class="block">
-        <el-date-picker v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+        <el-date-picker style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
         </el-date-picker>
       </div>
     </el-col>
-    <el-col :span="7">
+
+    <el-col :span="6">
       <el-button-group>
         <el-tooltip class="item" effect="light" content="搜索信息" placement="bottom">
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
@@ -124,27 +137,45 @@
       </el-button-group>
     </el-col>
   </el-row>
+  <el-row class="row selectrow">
+    <el-col :span="2">
+      <span class="selectlable">PO号</span>
+    </el-col>
+    <el-col :span="4">
+      <el-input style="width:82%;" v-model="poSelect" placeholder="请输入PO号" clearable></el-input>
+    </el-col>
+  </el-row>
   <el-row class="row">
     <el-col :span="24">
       <div style="display:none;">
-        <el-table id="print" ref="print" :data="tableData" @selection-change="onTableSelectChange">
-          <el-table-column prop="customerName" label="客户名称" width=100> </el-table-column>
-          <el-table-column prop="code" label="编号" width=180> </el-table-column>
-          <el-table-column prop="poNum" label="PO#" width=100> </el-table-column>
-          <el-table-column prop="item" label="ITEM" width=100> </el-table-column>
-          <el-table-column prop="color" label="镀金颜色" width=100> </el-table-column>
-          <el-table-column prop="count" label="数量" width=100> </el-table-column>
-          <el-table-column prop="price" label="单价" width=80> </el-table-column>
-          <el-table-column prop="sum" label="合计" width=80> </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width=100> </el-table-column>
-        </el-table>
+        <div id="print" ref="print">
+          <div>
+            <el-table :data="tableData">
+              <el-table-column prop="customerName" label="客户名称" width=100> </el-table-column>
+              <el-table-column prop="code" label="编号" width=180> </el-table-column>
+              <el-table-column prop="poNum" label="PO#" width=100> </el-table-column>
+              <el-table-column prop="item" label="ITEM" width=100> </el-table-column>
+              <el-table-column prop="color" label="镀金颜色" width=100> </el-table-column>
+              <el-table-column prop="count" label="数量" width=100> </el-table-column>
+              <el-table-column prop="price" label="单价" width=80> </el-table-column>
+              <el-table-column prop="sum" label="合计" width=80> </el-table-column>
+            </el-table>
+          </div>
+          <div>
+            <span class="print-result">价格合计：</span><span class="print-result">{{this.totalPrice}}</span><span class="print-result">元</span>
+          </div>
+          <div style="float: right;">
+            <div class="print-result">青岛同庆工艺品有限公司</div>
+            <div class="print-result">{{getCurrentTime()}}</div>
+          </div>
+        </div>
       </div>
       <el-table :data="tableData" :height="autoheight" @selection-change="onTableSelectChange">
         <el-table-column type="selection" width=60>
         </el-table-column>
         <el-table-column type="expand">
           <template slot-scope="scope">
-            <expandRow :order=scope.row :expandType="'inStorageByOrder'"></expandRow>
+            <expandRow :order="scope.row" :expandType="'inStorageByOrder'"></expandRow>
           </template>
         </el-table-column>
         <el-table-column prop="customerName" label="客户名称" width=200> </el-table-column>
@@ -153,6 +184,8 @@
         <el-table-column prop="item" label="ITEM" width=180> </el-table-column>
         <el-table-column prop="color" label="镀金颜色" width=180> </el-table-column>
         <el-table-column prop="count" label="数量" width=100> </el-table-column>
+        <el-table-column prop="partSumCount" label="组件总数" width=100> </el-table-column>
+        <el-table-column prop="partSumCountCal" label="已入库组件总数" width=140> </el-table-column>
         <el-table-column prop="replatCount" label="返镀数量" width=100 label-class-name="table-col-label-analy" class-name="table-col-analy"> </el-table-column>
         <el-table-column prop="replatRatio" label="返镀比率(%)" label-class-name="table-col-label-analy" class-name="table-col-analy" width=100> </el-table-column>
         <el-table-column prop="incomingCount" label="来料异常数量" label-class-name="table-col-label-analy" class-name="table-col-analy" width=110></el-table-column>
@@ -171,7 +204,7 @@
     </el-col>
   </el-row>
   <el-row>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[50, 200, 1000, 10000]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[20, 50, 100, 500]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
     </el-pagination>
   </el-row>
 </div>
@@ -180,45 +213,40 @@
 <script>
 import axios from 'axios'
 import expandRow from './expandRow'
-
+import moment from 'moment'
+import * as math from 'mathjs'
 export default {
   name: 'order',
   data() {
-    var count = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('不能为空'));
-      } else if (value.length > 100) {
-        return callback(new Error('长度不能超过100'));
-      } else {
-        callback();
-      }
-    };
-    var price = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('不能为空'));
-      } else if (value.length > 100) {
-        return callback(new Error('长度不能超过100'));
-      } else {
-        callback();
-      }
-    };
-    var sum = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('不能为空'));
-      } else {
-        callback();
-      }
-    };
     return {
       tableData: [],
       customerNameSelect: '',
       customerNameOptions: [],
       colorOptions: [],
       bakeOptions: [],
-      formout: {},
-      formoutupdate: {},
+      codeSelect: '',
+      poSelect: '',
+      totalPrice: 0,
+      formout: {
+        customerName: '',
+        poNum: '',
+        item: '',
+        color: '',
+        count: '',
+        price: '',
+        sum: '',
+      },
+      formoutupdate: {
+        customerName: '',
+        poNum: '',
+        item: '',
+        color: '',
+        count: '',
+        price: '',
+        sum: '',
+      },
       pageIndex: 1,
-      pageSize: 50,
+      pageSize: 20,
       totalRowCount: 0,
       idarr: [],
       avatarUrl: '',
@@ -231,20 +259,7 @@ export default {
         popTitle: '订单',
         previewTitle: '订单',
       },
-      rules: {
-        count: [{
-          validator: count,
-          trigger: 'blur'
-        }],
-        price: [{
-          validator: price,
-          trigger: 'blur'
-        }],
-        sum: [{
-          validator: sum,
-          trigger: 'blur'
-        }],
-      },
+      rules: {},
       autoheight: 0,
       pickerOptions: {
         shortcuts: [{
@@ -333,9 +348,9 @@ export default {
       console.log("this.time", this.time)
       let start = ''
       let end = ''
-      if (this.time != null) {
-        start = this.time[0]
-        end = this.time[1]
+      if (this.time != null && this.time.length == 2) {
+        start = moment(this.time[0]).format('YYYY-MM-DD HH:mm:ss')
+        end = moment(this.time[1]).format('YYYY-MM-DD HH:mm:ss')
       }
       axios
         .get(this.global.apiUrl + 'order', {
@@ -343,13 +358,20 @@ export default {
             pageIndex: this.pageIndex,
             pageSize: this.pageSize,
             customerNameItem: this.customerNameSelect,
+            code: this.codeSelect,
+            po: this.poSelect,
             starttime: start,
             endtime: end
           }
         })
         .then(res => {
+          let totalPrice = 0
           this.tableData = res.data.list
           this.totalRowCount = res.data.totalRowCount
+          res.data.list.forEach((item) => {
+            totalPrice = this.calculate(totalPrice + item.sum)
+          })
+          this.totalPrice = totalPrice
         })
         .catch(function(error) {
           console.log(error)
@@ -400,9 +422,11 @@ export default {
                   type: 'error'
                 });
               }
+              this.$refs['formout'].resetFields();
             })
             .catch(function(error) {
               console.log(error)
+              this.$refs['formout'].resetFields();
             })
         }
       })
@@ -432,9 +456,11 @@ export default {
                   type: 'error'
                 });
               }
+              this.$refs['formoutupdate'].resetFields();
             })
             .catch(function(error) {
               console.log(error)
+              this.$refs['formoutupdate'].resetFields();
             })
         }
       })
@@ -521,6 +547,29 @@ export default {
       }
       //return isJPG && isLt2M;
       return isLt2M;
+    },
+    formoutValueChange() {
+      this.formout.sum = this.calculate(this.formout.count * this.formout.price)
+    },
+    formoutupdateValueChange() {
+      this.formoutupdate.sum = this.calculate(this.formoutupdate.count * this.formoutupdate.price)
+      console.log(this.formoutupdate)
+    },
+    calculate(value) {
+      const precision = 14
+      return Number(math.format(value, precision))
+    },
+    getCurrentTime() {
+      //获取当前时间并打印
+      let yy = new Date().getFullYear();
+      let mm = new Date().getMonth() + 1;
+      let dd = new Date().getDate();
+      let hh = new Date().getHours();
+      let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes();
+      let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds();
+      let date = yy + '年' + mm + '月' + dd + '日';
+      let time = yy + '/' + mm + '/' + dd + ' ' + hh + ':' + mf + ':' + ss;
+      return date;
     }
   }
 }
@@ -584,10 +633,18 @@ export default {
   vertical-align: middle;
   line-height: 40px;
 }
-.table-col-analy{
+
+.table-col-analy {
   color: #ff0000;
 }
-.table-col-label-analy{
+
+.table-col-label-analy {
   color: #909399;
+}
+
+.print-result {
+  font-size: 16px;
+  color: #909399;
+  font-weight: bold;
 }
 </style>

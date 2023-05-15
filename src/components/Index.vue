@@ -1,7 +1,7 @@
 <template>
 <div style="text-align:center;" :style="{height: scrollerHeight}">
   <P>
-    <span style="font-family:微软雅黑;font-size:40px;font-weight:bold;color: #999;">同庆库存管理系统</span>
+    <span style="font-family:微软雅黑;font-size:40px;font-weight:bold;color: #999;">库存管理系统</span>
   </P>
 </div>
 </template>

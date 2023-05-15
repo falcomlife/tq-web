@@ -2,7 +2,7 @@
 <div>
   <el-row class="row">
     <el-col :span="12">
-      <el-card class="box-card">
+      <el-card class="box-card" :style="{height: scrollerHeight}">
         <el-row class="row">
           <i class="el-icon-s-data selectlable"></i>
           <span class="boxlable">订单统计</span>
@@ -30,18 +30,20 @@
             <span class="numlable">{{this.orderStatistics}}</span>
           </el-col>
           <el-col :span="12">
-            <el-table :data="orderByColor" style="width: 100%" :default-sort="{prop: 'count', order: 'descending'}">
-              <el-table-column prop="color" label="镀金颜色" sortable width="180">
-              </el-table-column>
-              <el-table-column prop="count" label="总量" sortable width="80">
-              </el-table-column>
-            </el-table>
+            <div style="overflow-y: scroll;" :style="{height: scrollerHeightDiv}">
+              <el-table :data="orderByColor" style="width: 100%" :default-sort="{prop: 'count', order: 'descending'}">
+                <el-table-column prop="color" label="镀金颜色" sortable width="180">
+                </el-table-column>
+                <el-table-column prop="count" label="总量" sortable width="80">
+                </el-table-column>
+              </el-table>
+            </div>
           </el-col>
         </el-row>
       </el-card>
     </el-col>
     <el-col :span="12">
-      <el-card class="box-card">
+      <el-card class="box-card" :style="{height: scrollerHeight}">
         <el-row class="row">
           <i class="el-icon-s-data selectlable"></i>
           <span class="boxlable">入库统计</span>
@@ -117,6 +119,9 @@ export default {
   computed: {
     scrollerHeight: function() {
       return (window.innerHeight - 150) + 'px'; //自定义高度需求
+    },
+    scrollerHeightDiv: function() {
+      return (window.innerHeight - 400) + 'px'; //自定义高度需求
     }
   },
   methods: {

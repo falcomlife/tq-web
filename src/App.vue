@@ -1,9 +1,14 @@
 <template>
 <div id="app">
   <el-container direction="vertical">
-    <el-header class="title">同庆工艺品有限公司</el-header>
+    <el-header class="title">青岛同庆工艺品有限公司</el-header>
     <el-container direction="horizontal" >
       <el-aside width=10% class="self-menu">
+        <el-menu default-active="/" router style="border-right: solid 0px #ffffff;">
+          <el-menu-item index="/">
+            <span class="self-menu-item">首页</span>
+          </el-menu-item>
+        </el-menu>
         <el-menu default-active="/order" router style="border-right: solid 0px #ffffff;">
           <el-menu-item index="/order">
             <span class="self-menu-item">订单管理</span>
@@ -66,7 +71,7 @@ export default {
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   font: bold 40px/60px arial, sans-serif;
   color: #fff;
-  background-color: #99CCFF;
+  background-color: #409EFF;
 }
 
 .self-menu-item {

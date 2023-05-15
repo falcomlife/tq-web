@@ -161,22 +161,28 @@
     <el-col :span="2">
       <span class="selectlable">客户名称：</span>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="4">
       <el-select v-model="customerNameSelect" clearable filterable placeholder="请选择">
         <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
         </el-option>
       </el-select>
     </el-col>
+    <el-col :span="1">
+      <span class="selectlable">编号</span>
+    </el-col>
+    <el-col :span="4">
+      <el-input style="width:80%;" v-model="codeSelect" placeholder="请输入编号" clearable></el-input>
+    </el-col>
     <el-col :span="2">
       <span class="selectlable">时间范围：</span>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="5">
       <div class="block">
-        <el-date-picker v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+        <el-date-picker style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
         </el-date-picker>
       </div>
     </el-col>
-    <el-col :span="7">
+    <el-col :span="6">
       <el-button-group>
         <el-tooltip class="item" effect="light" content="搜索信息" placement="bottom">
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
@@ -218,7 +224,7 @@
         <el-table-column prop="image" label="产品图片" width=100>
           <template slot-scope="scope">
             <div style="width:50%;height:50%;">
-              <el-image :src="scope.row.image" :preview-src-list="[scope.row.image]"></el-image>
+              <el-image :src="scope.row.image" :fit="contain" :preview-src-list="[scope.row.image]"></el-image>
             </div>
           </template>
         </el-table-column>
@@ -230,6 +236,7 @@
         <el-table-column prop="bake" label="烤厅" width=60> </el-table-column>
         <el-table-column prop="count" label="总订单量" width=100> </el-table-column>
         <el-table-column prop="outType" label="出库类型" width=80> </el-table-column>
+        <el-table-column prop="inCount" label="入库数量" width=80> </el-table-column>
         <el-table-column prop="bunchCount" label="总个数" width=70> </el-table-column>
         <el-table-column prop="outCount" label="出库数量" width=80> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=160> </el-table-column>
@@ -244,7 +251,7 @@
     </el-col>
   </el-row>
   <el-row>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[50, 200, 1000, 10000]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[20, 50, 100, 500]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
     </el-pagination>
   </el-row>
 </div>
@@ -252,6 +259,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
   name: 'outStorage',
@@ -272,18 +280,25 @@ export default {
       colorOptions: [],
       bakeOptions: [],
       inStorageOptions: [],
+      codeSelect: '',
       outTypeOptions: [
         {
           id: "1",
-          itemName: "正常出库"
+          itemName: "良品"
         },{
           id: "2",
-          itemName: "来料异常"
+          itemName: "不良"
         },{
           id: "3",
-          itemName: "工作损耗"
+          itemName: "来料异常"
         },{
           id: "4",
+          itemName: "白金出库"
+        },{
+          id: "5",
+          itemName: "硫酸铜出库"
+        },{
+          id: "6",
           itemName: "其他"
         }
       ],
@@ -369,7 +384,7 @@ export default {
         isDelete: "",
       },
       pageIndex: 1,
-      pageSize: 50,
+      pageSize: 20,
       totalRowCount: 0,
       idarr: [],
       avatarUrl: '',
@@ -473,9 +488,9 @@ export default {
     getList() {
       let start = ''
       let end = ''
-      if (this.time != null) {
-        start = this.time[0]
-        end = this.time[1]
+      if (this.time != null && this.time.length == 2 ) {
+        start = moment(this.time[0]).format('YYYY-MM-DD HH:mm:ss')
+        end = moment(this.time[1]).format('YYYY-MM-DD HH:mm:ss')
       }
       axios
         .get(this.global.apiUrl + 'outStorage', {
@@ -483,6 +498,7 @@ export default {
             pageIndex: this.pageIndex,
             pageSize: this.pageSize,
             customerNameItem: this.customerNameSelect,
+            code: this.codeSelect,
             starttime: start,
             endtime: end
           }
