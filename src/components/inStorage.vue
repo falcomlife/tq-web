@@ -70,7 +70,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="出库编号" prop="outStorageId" v-if="formout.incomingType==5">
-                    <el-select v-model="formout.outStorageId" filterable remote reserve-keyword placeholder="请输入订单编号" :remote-method="getOutStorageByCode" :loading="outStorageLoading" @change="outStorageCodeChange">
+                    <el-select v-model="formout.outStorageId" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
@@ -174,7 +174,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="出库编号" prop="outStorageCode" v-if="formoutupdate.incomingTypeId==5">
-                    <el-select v-model="formoutupdate.outStorageCode" filterable remote reserve-keyword placeholder="请输入订单编号" :remote-method="getOutStorageByCode" :loading="outStorageLoading" @change="outStorageCodeChange">
+                    <el-select v-model="formoutupdate.outStorageCode" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
@@ -236,7 +236,7 @@
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="新增入库信息" placement="bottom">
-          <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small round>新增</el-button>
+          <el-button type="primary" icon="el-icon-document-add" @click="add()" size=small round>新增</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="bottom">
           <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
@@ -266,6 +266,7 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库镀金颜色">
                     <font color="red">{{item.color}}</font>
                   </el-descriptions-item>
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="订单镀金颜色">{{item.orderColor}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="烤厅">{{item.bake}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总个数">{{item.bunchCount}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库数量">
@@ -278,7 +279,6 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="PO#">{{item.poNum}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="ITEM">{{item.item}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总订单量">{{item.count}}</el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="订单镀金颜色">{{item.orderColor}}</el-descriptions-item>
                 </el-descriptions>
               </div>
             </div>
@@ -468,6 +468,7 @@ export default {
         colorId: "",
         count: "",
         bunchCount: "",
+        outStorageId:"",
         bake: "",
         bakeId: "",
         inCount: "",
@@ -496,6 +497,7 @@ export default {
         colorId: "",
         count: "",
         bunchCount: "",
+        outStorageCode:"",
         bake: "",
         bakeId: "",
         inCount: "",
@@ -718,9 +720,14 @@ export default {
       this.pageIndex = val
       this.getList()
     },
+    add(){
+      this.draweradd=true
+      this.getOutStorageByCode(null,this.formout.orderId,this.formout.item,true)
+    },
     info(row) {
       this.drawerupdate = true
       this.formoutupdate = row
+      this.getOutStorageByCode(null,this.formoutupdate.orderId,this.formoutupdate.item,false)
     },
     submitForm() {
       this.$refs['formout'].validate((valid) => {
@@ -925,12 +932,16 @@ export default {
             this.formout.item = res.data.rs.item
             this.formout.count = res.data.rs.count
             this.formout.orderColor = res.data.rs.color
+            this.formout.orderId = orderId
 
             this.formoutupdate.customerNameId = res.data.rs.customerName
             this.formoutupdate.poNum = res.data.rs.poNum
             this.formoutupdate.item = res.data.rs.item
             this.formoutupdate.count = res.data.rs.count
             this.formoutupdate.orderColorId = res.data.rs.color
+
+            this.getOutStorageByCode(null,orderId,this.formout.item,true)
+
           } else {
             this.$message({
               showClose: true,
@@ -943,16 +954,23 @@ export default {
           console.log(error)
         })
     },
-    getOutStorageByCode(code) {
+    getOutStorageByCode(code,orderId,item,reflash) {
       axios
         .get(this.global.apiUrl + 'outStorage/code', {
           params: {
-            code: code
+            code: code,
+            orderId: orderId,
+            item: item
           }
         })
         .then(res => {
           if (res.data.s == 0) {
+            console.log("enter")
             this.outStorageCodeOptions = res.data.rs
+            if(reflash){
+              this.formout.outStorageId = null
+              this.formoutupdate.outStorageCode = null
+            }            
             this.outStorageLoading = false
           } else {
             this.$message({

@@ -298,6 +298,9 @@ export default {
           id: "5",
           itemName: "硫酸铜出库"
         },{
+          id: "7",
+          itemName: "返回挑面"
+        },{
           id: "6",
           itemName: "其他"
         }

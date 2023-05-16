@@ -144,6 +144,12 @@
     <el-col :span="4">
       <el-input style="width:82%;" v-model="poSelect" placeholder="请输入PO号" clearable></el-input>
     </el-col>
+    <el-col :span="2">
+      <span class="selectlable">ITEM</span>
+    </el-col>
+    <el-col :span="4">
+      <el-input style="width:82%;" v-model="itemSelect" placeholder="请输入ITEM" clearable></el-input>
+    </el-col>
   </el-row>
   <el-row class="row">
     <el-col :span="24">
@@ -226,6 +232,7 @@ export default {
       bakeOptions: [],
       codeSelect: '',
       poSelect: '',
+      itemSelect: '',
       totalPrice: 0,
       formout: {
         customerName: '',
@@ -360,6 +367,7 @@ export default {
             customerNameItem: this.customerNameSelect,
             code: this.codeSelect,
             po: this.poSelect,
+            item: this.itemSelect,
             starttime: start,
             endtime: end
           }
