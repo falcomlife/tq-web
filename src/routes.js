@@ -1,16 +1,24 @@
-import order from './components/order.vue';
-import inStorage from './components/inStorage.vue';
-import outStorage from './components/outStorage.vue';
-import dict from './components/dict.vue';
-import report from './components/report.vue';
-import Index from './components/Index.vue';
+import order from './views/order/order.vue';
+import inStorage from './views/inStorage/inStorage.vue';
+import outStorage from './views/outStorage/outStorage.vue';
+import dict from './views/dict/dict.vue';
+import report from './views/report/report.vue';
+import index from './views/index.vue';
+import login from './views/login.vue';
 
 const routes = [
   {
     path: '/',
-    component: Index,
+    component: index,
     meta: {
-      title: 'Index'
+      title: 'index'
+    }
+  },
+  {
+    path: '/login',
+    component: login,
+    meta: {
+      title: 'login'
     }
   },
   {

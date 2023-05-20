@@ -1,8 +1,16 @@
 <template>
 <div id="app">
+  <el-alert
+  title="网络异常"
+  type="error"
+  description="网络请求未能成功发出，请检查本地电脑网络情况，检查是否使用代理。"
+  show-icon
+  v-if="this.alertShow"
+  @close="alertClose">
+</el-alert>
   <el-container direction="vertical">
     <el-header class="title">青岛同庆工艺品有限公司</el-header>
-    <el-container direction="horizontal" >
+    <el-container direction="horizontal">
       <el-aside width=10% class="self-menu">
         <el-menu default-active="/" router style="border-right: solid 0px #ffffff;">
           <el-menu-item index="/">
@@ -52,7 +60,19 @@ export default {
       autoheight: 0
     }
   },
-  created(){}
+  computed:{
+    alertShow: function(){
+      return this.$store.state.netWorkBroke
+    }
+  },
+  created() {},
+  methods: {
+    alertClose(){
+      console.log("enter")
+      this.$store.commit('changeNetwork', false)
+    }
+  }
+
 }
 </script>
 

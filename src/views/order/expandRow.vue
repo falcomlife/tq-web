@@ -55,9 +55,9 @@ export default {
   name: 'expandRow',
   data() {
     return {
-      tableInStorageOrderData: {},
-      tableOutStoragesData: {},
-      tableOutStorageData: {},
+      tableInStorageOrderData: [],
+      tableOutStoragesData: [],
+      tableOutStorageData: [],
     }
   },
   props: {
@@ -79,13 +79,9 @@ export default {
   },
   methods: {
     getInStorageListByOrder() {
-      axios
-        .get(this.global.apiUrl + 'inStorage/order', {
-          params: {
-            orderId: this.order.id
-          }
-        })
-        .then(res => {
+      this.$api.order.getInStorageListByOrder({
+        orderId: this.order.id
+      }).then(res => {
           if (res.data.s == 0) {
             console.log(res.data)
             this.tableInStorageOrderData = res.data.rs
@@ -102,14 +98,9 @@ export default {
         })
     },
     getOutStorageListByInStorage() {
-      console.log("getOutStorageListByInStorage")
-      axios
-        .get(this.global.apiUrl + 'outStorage/list', {
-          params: {
-            inStorageId: this.inStorage.id
-          }
-        })
-        .then(res => {
+      this.$api.order.getOutStorageListByInStorage({
+        inStorageId: this.inStorage.id
+      }).then(res => {
           if (res.data.s == 0) {
             console.log("res", res)
             this.tableOutStoragesData = res.data.rs
@@ -126,15 +117,10 @@ export default {
         })
     },
     getOutStorageByInStorage() {
-      axios
-        .get(this.global.apiUrl + 'outStorage/one', {
-          params: {
-            outStorageId: this.inStorage.outStorageId
-          }
-        })
-        .then(res => {
+      this.$api.order.getOutStorageByInStorage({
+        outStorageId: this.inStorage.outStorageId
+      }).then(res => {
           if (res.data.s == 0) {
-            console.log("res", res)
             this.tableOutStorageData = res.data.rs
           } else {
             this.$message({
