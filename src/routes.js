@@ -3,57 +3,64 @@ import inStorage from './views/inStorage/inStorage.vue';
 import outStorage from './views/outStorage/outStorage.vue';
 import dict from './views/dict/dict.vue';
 import report from './views/report/report.vue';
-import index from './views/index.vue';
+import home from './views/home.vue';
 import login from './views/login.vue';
 
 const routes = [
   {
-    path: '/',
-    component: index,
-    meta: {
-      title: 'index'
-    }
-  },
-  {
     path: '/login',
     component: login,
     meta: {
-      title: 'login'
+      title: 'login',
+      keepAlive: false
+    }
+  },
+  {
+    path: '/',
+    component: home,
+    meta: {
+      title: 'home',
+      keepAlive: true
     }
   },
   {
     path: '/order',
     component: order,
     meta: {
-      title: 'order'
+      title: 'order',
+      keepAlive: true
     }
   },
   {
     path: '/inStorage',
     component: inStorage,
     meta: {
-      title: 'inStorage'
+      title: 'inStorage',
+      keepAlive: true
     }
   },
   {
     path: '/outStorage',
     component: outStorage,
     meta: {
-      title: 'outStorage'
+      title: 'outStorage',
+      keepAlive: true
     }
   },
   {
     path: '/dict',
     component: dict,
     meta: {
-      title: 'dict'
+      title: 'dict',
+      keepAlive: true
     }
   },
   {
     path: '/report',
     component: report,
     meta: {
-      title: 'report'
+      title: 'report',
+      keepAlive: true
     }
   }
 ];
