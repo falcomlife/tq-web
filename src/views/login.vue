@@ -1,14 +1,18 @@
 <template>
-<el-card class="box-card" shadow="hover">
-  <el-form :model="loginForm" status-icon ref="loginForm" label-width="10%" class="demo-loginForm">
-    <el-form-item label="账号" prop="pass">
-      <el-input v-model="loginForm.pass" autocomplete="off"></el-input>
+<el-card class="box-card" shadow="hover" >
+  <h2>登录</h2>
+  <el-form :model="loginForm" status-icon ref="loginForm" label-width="20%" class="demo-loginForm">
+    <el-form-item label="公司编码" prop="companyCode">
+      <el-input v-model="loginForm.companyCode" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="密码" prop="checkPass">
-      <el-input type="password" v-model="loginForm.checkPass" autocomplete="off"></el-input>
+    <el-form-item label="账号" prop="account">
+      <el-input v-model="loginForm.account" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item style="">
-      <el-button style="" type="primary" @click="submitForm()">登录</el-button>
+    <el-form-item label="密码" prop="password">
+      <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submitForm()">登录</el-button>
     </el-form-item>
   </el-form>
 </el-card>
@@ -21,22 +25,33 @@ export default {
   name: 'Index',
   data() {
     return {
+      login: true,
       loginForm: {
-        username: '',
+        companyCode: '',
+        account: '',
         password: ''
-      },
+      }
     }
   },
   created() {},
   computed: {},
   methods: {
     submitForm() {
-      console.log(this.loginForm)
-      this.$store.commit("changeLogin", true)
-      localStorage.setItem("isLogin", true)
-      localStorage.getItem("isLogin")
-      this.$router.push("/")
-    }
+      this.$refs['loginForm'].validate((valid) => {
+        if (valid) {
+          let body = {
+            username: this.loginForm.companyCode+"/"+this.loginForm.account,
+            password: this.loginForm.password
+          }
+          this.$api.login.login(body).then(res => {
+            console.log(res)
+            this.$store.commit("changeLogin", true)
+            localStorage.setItem("token",res.data.token)
+            this.$router.push("/")
+          })
+        }
+      })
+    },
   }
 }
 </script>
@@ -45,7 +60,7 @@ export default {
 .box-card {
   width: 30%;
   padding: 2% 1%;
-  margin-top: 15%;
+  margin-top: 10%;
   margin-left: 35%;
   font-size: 16px;
   color: #909399;

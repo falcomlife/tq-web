@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     netWorkBroke: false,
-    isLogin: false
+    isLogin: false,
   },
   mutations: {
     changeNetwork(state,s){
@@ -14,7 +14,7 @@ export default new Vuex.Store({
     },
     changeLogin(state,s){
       state.isLogin = s
-    }
+    },
   },
   actions: {},
   modules: {},

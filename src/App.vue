@@ -1,5 +1,4 @@
 <template>
-
   <Index v-if="this.$route.meta.keepAlive"></Index>
   <Login v-else></Login>
 </template>
@@ -24,7 +23,9 @@ export default {
       return this.$store.state.isLogin
     }
   },
-  created() {},
+  created() {
+    console.log("console.log(this.$route)",this)
+  },
   methods: {}
 
 }

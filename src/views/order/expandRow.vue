@@ -4,7 +4,6 @@
     <div style="width:100%;height:1px;"></div>
   </el-col>
   <el-col :span="23">
-
     <el-table :data="tableInStorageOrderData" style="width: 100%" v-if="expandType=='inStorageByOrder'" row-class-name="expandtablebody" header-row-class-name="expandtableheader">
       <el-table-column type="expand">
         <template slot-scope="scope">
