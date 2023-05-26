@@ -1,6 +1,8 @@
 import order from './views/order/order.vue';
 import inStorage from './views/inStorage/inStorage.vue';
 import outStorage from './views/outStorage/outStorage.vue';
+import company from './views/company/company.vue';
+import companyinfo from './views/company/companyinfo.vue';
 import dict from './views/dict/dict.vue';
 import report from './views/report/report.vue';
 import home from './views/home.vue';
@@ -8,9 +10,8 @@ import login from './views/login.vue';
 import Router from 'vue-router'
 import Vue from 'vue'
 
-
-export default new Router(
-  [
+export default new Router({
+  routes:[
     {
       path: '/login',
       component: login,
@@ -52,6 +53,26 @@ export default new Router(
       }
     },
     {
+      path: '/company',
+      component: company,
+      meta: {
+        title: 'company',
+        keepAlive: true,
+        level: 1
+      },
+      children: [
+        {
+          path: 'info',
+          component: companyinfo,
+          meta: {
+            title: 'companyinfo',
+            keepAlive: true,
+            level: 2
+          }
+        },
+      ]
+    },
+    {
       path: '/dict',
       component: dict,
       meta: {
@@ -68,4 +89,4 @@ export default new Router(
       }
     }
   ]
-);
+});

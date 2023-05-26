@@ -27,6 +27,11 @@
               <span>出库管理</span>
             </el-menu-item>
           </el-menu>
+          <el-menu default-active="/company" router style="border-right: solid 0px #ffffff;">
+            <el-menu-item index="/company">
+              <span>客户公司</span>
+            </el-menu-item>
+          </el-menu>
           <el-menu default-active="/report" router style="border-right: solid 0px #ffffff;">
             <el-menu-item index="/report">
               <span>报表统计</span>
@@ -56,7 +61,13 @@ export default {
       autoheight: 0
     }
   },
-  created() {},
+  created() {
+    this.$api.login.tokenVail().then(res => {
+      if(res.data.s != 0){
+        this.$route.replace('/login')
+      }
+    })
+  },
   computed: {
     scrollerHeight: function() {
       return (window.innerHeight - 100) + 'px'; //自定义高度需求

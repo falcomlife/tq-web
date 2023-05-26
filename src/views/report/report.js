@@ -17,6 +17,11 @@ export default {
   created() {
     // this.getOrderStatistics()
     // this.getInStorageStatistics()
+    this.$api.login.tokenVail().then(res => {
+      if(res.data.s != 0){
+        this.$route.replace('/login')
+      }
+    })
     this.autoheight = window.innerHeight / 2 - 200
   },
   computed: {

@@ -11,7 +11,13 @@ export default {
     return {
     }
   },
-  created() {},
+  created() {
+    this.$api.login.tokenVail().then(res => {
+      if(res.data.s != 0){
+        this.$route.replace('/login')
+      }
+    })
+  },
   computed: {},
   methods: {}
 }

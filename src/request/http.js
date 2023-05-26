@@ -20,7 +20,7 @@ const errorCode = {
  * 提示函数
  * 禁止点击蒙层、显示一秒后关闭
  */
-const tip = (msg,level) => {
+const tip = (msg, level) => {
   Message({
     showClose: true,
     message: msg,
@@ -46,22 +46,23 @@ const errorHandle = (status, data) => {
   switch (status) {
     // 401: 未登录状态，跳转登录页
     case 401:
-      tip(data.rs,'warning');
+      tip(data.rs, 'warning');
+      if (data.code == 150) {
+        toLogin()
+      }
       break;
       // 403
       // 清除token并跳转登录页
     case 403:
-      tip(data.rs,'warning');
-      setTimeout(() => {
-        toLogin();
-      }, 1000);
+      tip(data.rs, 'warning');
+      toLogin()
       break;
       // 404请求不存在
     case 404:
-      tip('请求的资源不存在','warning');
+      tip('请求的资源不存在', 'warning');
       break;
     case 500:
-      tip(data.rs,'error');
+      tip(data.rs, 'error');
       break;
     default:
       console.log(data.rs);
@@ -99,12 +100,12 @@ instance.interceptors.response.use(
   res => {
     if (res.status === 200) {
       if (res.data.s === 1) {
-        tip(res.data.rs,'error');
+        tip(res.data.rs, 'error');
         return Promise.reject(res)
       }
       return Promise.resolve(res)
     } else {
-      tip(res.data.rs,'warning');
+      tip(res.data.rs, 'warning');
       return Promise.reject(res)
     }
   },
@@ -119,9 +120,6 @@ instance.interceptors.response.use(
       return Promise.reject(response);
     } else {
       // 处理断网的情况
-      // eg:请求超时或断网时，更新state的network状态
-      // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
-      // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
       store.commit('changeNetwork', true);
       return Promise.reject(response);
     }
