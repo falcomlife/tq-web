@@ -1,4 +1,9 @@
-
+.content-body {
+  padding: 2% 3%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 8px #ccc;
+}
 .el-table .cell {
   white-space: pre-line;
 }

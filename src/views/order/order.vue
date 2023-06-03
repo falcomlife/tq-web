@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="content-body">
   <el-row class="row">
     <el-col :span="24">
       <!-- 新建 -->
@@ -104,7 +104,7 @@
         </el-option>
       </el-select>
     </el-col>
-    <el-col :span="1">
+    <el-col :span="2">
       <span class="selectlable">编号</span>
     </el-col>
     <el-col :span="4">
@@ -113,14 +113,14 @@
     <el-col :span="2">
       <span class="selectlable">时间范围</span>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="6">
       <div class="block">
         <el-date-picker style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
         </el-date-picker>
       </div>
     </el-col>
 
-    <el-col :span="6">
+    <el-col :span="4">
       <el-button-group>
         <el-tooltip class="item" effect="light" content="搜索信息" placement="bottom">
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
@@ -129,13 +129,7 @@
           <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small>新增</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="bottom">
-          <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small>删除</el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="light" content="导出" placement="bottom">
-          <el-button type='primary' icon="el-icon-printer" size=small round @click="exportExcel()">导出</el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="light" content="打印" placement="bottom">
-          <el-button type='primary' icon="el-icon-printer" size=small round v-print="print">打印</el-button>
+          <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
         </el-tooltip>
       </el-button-group>
     </el-col>
@@ -152,6 +146,19 @@
     </el-col>
     <el-col :span="4">
       <el-input style="width:82%;" v-model="itemSelect" placeholder="请输入ITEM" clearable></el-input>
+    </el-col>
+    <el-col :span="8" style="min-height:1px;" >
+    </el-col>
+    <el-col :span="4">
+      <el-button-group>
+        <el-tooltip class="item" effect="light" content="导出" placement="bottom">
+          <el-button type='primary' icon="el-icon-printer" size=small round @click="exportExcel()">导出</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="打印" placement="bottom">
+          <el-button type='primary' icon="el-icon-printer" size=small round v-print="print">打印</el-button>
+        </el-tooltip>
+      </el-button-group>
+
     </el-col>
   </el-row>
   <el-row class="row">

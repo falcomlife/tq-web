@@ -3,10 +3,13 @@
   <el-row class="row selectrow">
     <el-col :span="6">
       <el-button-group>
-        <el-tooltip class="item" effect="light" content="锁定" placement="bottom">
+        <el-tooltip class="item" effect="light" content="锁定选中用户" placement="bottom">
           <el-button type="primary" icon="el-icon-lock" @click="lock()" size=small round>锁定</el-button>
         </el-tooltip>
-        <el-tooltip class="item" effect="light" content="删除" placement="bottom">
+        <el-tooltip class="item" effect="light" content="解锁选中用户" placement="bottom">
+          <el-button type="primary" icon="el-icon-unlock" @click="nonelock()" size=small round>解锁</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="删除选中用户" placement="bottom">
           <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
         </el-tooltip>
       </el-button-group>
@@ -15,27 +18,30 @@
   <el-row>
     <el-col>
       <el-table :data="tableData" :height="autoheight" @selection-change="onTableSelectChange">
-        <el-table-column type="selection" width=100>
+        <el-table-column type="selection" min-width=10%>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width=200> </el-table-column>
-        <el-table-column prop="account" label="账户" width=200> </el-table-column>
-        <el-table-column prop="isLock" label="是否锁定" width=200> </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width=200> </el-table-column>
-        <el-table-column label="操作" width=100>
+        <el-table-column prop="name" label="姓名" min-width=20%> </el-table-column>
+        <el-table-column prop="account" label="账户" min-width=20%> </el-table-column>
+        <el-table-column prop="code" label="工号" min-width=20%> </el-table-column>
+        <el-table-column prop="isLockName" label="是否锁定" min-width=10%> </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" min-width=10%> </el-table-column>
+        <el-table-column label="操作" min-width=10%>
           <template slot-scope="scope">
             <el-popover placement="right" width="200" trigger="click">
-              <el-table :data="authorityData" heigh="800">
+              <h3 style="color: #909399;">配置角色</h3>
+              <el-table :data="userData">
                 <el-table-column prop="inRole" width="100">
-                  <template slot-scope="scopeRole">
-                    <el-switch v-model="scopeRole.row.inRole" @change="inRoleChange(scope.row,scopeRole.row)">
+                  <template slot-scope="scopeUser">
+                    <el-switch v-model="scopeUser.row.inUser" @change="(value) => inUserChange(value,scope.row,scopeUser.row)">
                     </el-switch>
                   </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称" width="100">
                 </el-table-column>
               </el-table>
-              <el-button slot="reference" type="primary" icon="el-icon-edit-outline" size="mini" circle @click="getAuthorityList(scope.row)"></el-button>
+              <el-button slot="reference" type="primary" icon="el-icon-user" size="mini" circle @click="getRoleList(scope.row)"></el-button>
             </el-popover>
+            <el-button style="margin-left: 10px;" slot="reference" type="warning" icon="el-icon-edit-outline" size="mini" round @click="rebackPassword(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -53,7 +59,7 @@
 
 <script>
 export default {
-  name: 'role',
+  name: 'user',
   data() {
     var name = (rule, value, callback) => {
       if (!value) {
@@ -69,15 +75,11 @@ export default {
       pageIndex: 1,
       totalRowCount: 0,
       tableData: [],
-      authorityData: [],
+      userData: [],
       name: "",
       code: "",
       info: false,
       dialogVisible: false,
-      formout: {
-        name: "",
-        companyId: ""
-      },
       checkboxGroup: [],
       rules: {
         name: [{
@@ -95,33 +97,27 @@ export default {
     }
   },
   created() {
-    this.autoheight = window.innerHeight - 270
+    this.autoheight = window.innerHeight * 0.568
     this.getList()
   },
   updated() {
     console.log(this.companyId)
   },
-  computed: {
-    scrollerHeight: function() {
-      return (window.innerHeight - 150) + 'px'; //自定义高度需求
-    }
-  },
   methods: {
     getList() {
-      this.$api.role.getList({
+      this.$api.user.getList({
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
         name: this.name,
         companyId: this.companyId,
       }).then(res => {
-        let totalPrice = 0
         this.tableData = res.data.rs.list
         this.totalRowCount = res.data.rs.totalRowCount
       })
     },
-    getAuthorityList(row) {
-      this.$api.authority.getAll({
-        "roleId": row.id
+    getRoleList(row) {
+      this.$api.user.getRoleList({
+        "userId": row.id
       }).then(res => {
         let arr = res.data.rs
         arr.forEach((item, index) => {
@@ -144,36 +140,18 @@ export default {
             item.isEnableName = "未启用"
           }
         })
-        this.authorityData = arr
+        this.userData = arr
       })
     },
-    submitForm() {
-      this.$refs['formout'].validate((valid) => {
-        if (valid) {
-          this.formout.companyId = this.companyId
-          this.$api.role.save(this.formout)
-            .then(res => {
-              if (res.data.s == "0") {
-                this.$message({
-                  showClose: true,
-                  message: '创建成功',
-                  type: 'success'
-                });
-                this.getList()
-              }
-              this.$refs['formout'].resetFields();
-            })
-        }
-      })
-    },
-    inRoleChange(row,rowRole){
-      console.log(row,rowRole)
-      let body={
+    inUserChange(value, row, rowUser) {
+      console.log(row, rowUser)
+      let body = {
         id: row.id,
-        authorityId: rowRole.id
+        roleId: rowUser.id,
+        roleFlag: value,
       }
-      this.$api.role.addAuthorityToRole(body).then(res => {
-        if(res.data.s == 0){
+      this.$api.user.addRoleToUser(body).then(res => {
+        if (res.data.s == 0) {
           this.$message({
             showClose: true,
             message: '修改成功',
@@ -202,7 +180,7 @@ export default {
     },
     remove() {
       let newArr = JSON.parse(JSON.stringify(this.idarr))
-      this.$api.role.delete({
+      this.$api.user.delete({
           data: newArr
         })
         .then(res => {
@@ -216,15 +194,47 @@ export default {
           }
         })
     },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done();
+    lock() {
+      let newArr = JSON.parse(JSON.stringify(this.idarr))
+      this.$api.user.lock(newArr)
+        .then(res => {
+          if (res.data.s == "0") {
+            this.$message({
+              showClose: true,
+              message: '锁定成功',
+              type: 'success'
+            });
+            this.getList()
+          }
         })
-        .catch(_ => {});
     },
-    editAuthority(row) {
-      console.log(row)
+    nonelock() {
+      let newArr = JSON.parse(JSON.stringify(this.idarr))
+      this.$api.user.nonelock(newArr)
+        .then(res => {
+          if (res.data.s == "0") {
+            this.$message({
+              showClose: true,
+              message: '解锁成功',
+              type: 'success'
+            });
+            this.getList()
+          }
+        })
+    },
+    rebackPassword(row) {
+      this.$api.user.rebackPassword({
+        "id": row.id
+      }).then(res => {
+        if (res.data.s == "0") {
+          this.$message({
+            showClose: true,
+            message: '重置成功',
+            type: 'success'
+          });
+          this.getList()
+        }
+      })
     }
   }
 }
@@ -301,5 +311,9 @@ export default {
   font-size: 16px;
   color: #909399;
   font-weight: bold;
+}
+
+.el-tabs--top {
+  height: auto !important;
 }
 </style>

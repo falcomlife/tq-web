@@ -5,12 +5,13 @@ import company from './views/company/company.vue';
 import companyinfo from './views/company/companyinfo.vue';
 import dict from './views/dict/dict.vue';
 import report from './views/report/report.vue';
-import home from './views/home.vue';
 import login from './views/login.vue';
 import Router from 'vue-router'
 import Vue from 'vue'
 
 export default new Router({
+  mode: 'history',
+  base: '/web',
   routes:[
     {
       path: '/login',
@@ -22,9 +23,9 @@ export default new Router({
     },
     {
       path: '/',
-      component: home,
+      component: report,
       meta: {
-        title: 'home',
+        title: 'report',
         keepAlive: true
       }
     },
@@ -77,14 +78,6 @@ export default new Router({
       component: dict,
       meta: {
         title: 'dict',
-        keepAlive: true
-      }
-    },
-    {
-      path: '/report',
-      component: report,
-      meta: {
-        title: 'report',
         keepAlive: true
       }
     }

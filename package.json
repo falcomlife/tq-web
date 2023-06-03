@@ -1,6 +1,6 @@
 {
   "name": "tq",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "test": "vue-cli-service build --mode test",
@@ -12,11 +12,11 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "echarts": "4.8.0",
+    "echarts": "^5.4.2",
     "element-ui": "^2.15.7",
+    "jutils-src": "^1.0.0-beta2",
     "mathjs": "^11.8.0",
     "moment": "^2.29.4",
-    "vant": "^4.3.2",
     "vue": "^2.15.7",
     "vue-print-nb": "^1.7.5",
     "vue-router": "^3.4.9",

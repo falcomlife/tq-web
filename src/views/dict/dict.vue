@@ -4,23 +4,31 @@
     <el-col :span="12">
       <el-card class="box-card">
         <el-row class="row">
-          <span class="boxlable">客户名称</span>
-        </el-row>
-        <el-row class="row">
-          <el-button type="primary" icon="el-icon-document-add" @click="drawercustomer=true" size=mini round>新增</el-button>
+          <el-col :span="4">
+            <span class="boxlable">客户名称</span>
+          </el-col>
+          <el-col :span="20">
+            <div style="float: right;">
+              <el-button type="primary" icon="el-icon-document-add" @click="drawercustomer=true" size=mini round>新增</el-button>
+            </div>
+          </el-col>
         </el-row>
         <el-table :data="tableCustomer" :height="autoheight">
           <el-table-column prop="itemName" label="内容名称" style="width:100%"> </el-table-column>
         </el-table>
       </el-card>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="12" style="padding-left: 1%;">
       <el-card class="box-card">
         <el-row class="row">
-          <span class="boxlable">镀金颜色</span>
-        </el-row>
-        <el-row class="row">
-          <el-button type="primary" icon="el-icon-document-add" @click="drawercolor=true" size=mini round>新增</el-button>
+          <el-col :span="4">
+            <span class="boxlable">镀金颜色</span>
+          </el-col>
+          <el-col :span="20">
+            <div style="float: right;">
+              <el-button type="primary" icon="el-icon-document-add" @click="drawercolor=true" size=mini round>新增</el-button>
+            </div>
+          </el-col>
         </el-row>
         <el-table :data="tableColor" :height="autoheight">
           <el-table-column prop="itemName" label="内容名称" style="width:100%"> </el-table-column>
@@ -32,23 +40,31 @@
     <el-col :span="12">
       <el-card class="box-card">
         <el-row class="row">
-          <span class="boxlable">烤厅</span>
-        </el-row>
-        <el-row class="row">
-          <el-button type="primary" icon="el-icon-document-add" @click="drawerct=true" size=mini round>新增</el-button>
+          <el-col :span="4">
+            <span class="boxlable">烤厅</span>
+          </el-col>
+          <el-col :span="20">
+            <div style="float: right;">
+              <el-button type="primary" icon="el-icon-document-add" @click="drawerct=true" size=mini round>新增</el-button>
+            </div>
+          </el-col>
         </el-row>
         <el-table :data="tableCt" :height="autoheight">
           <el-table-column prop="itemName" label="内容名称" style="width:100%"> </el-table-column>
         </el-table>
       </el-card>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="12" style="padding-left: 1%;">
       <el-card class="box-card">
         <el-row class="row">
-          <span class="boxlable">来料类别</span>
-        </el-row>
-        <el-row class="row">
-          <el-button type="primary" icon="el-icon-document-add" @click="drawercomingtype=true" size=mini round>新增</el-button>
+          <el-col :span="4">
+            <span class="boxlable">来料类别</span>
+          </el-col>
+          <el-col :span="20">
+            <div style="float: right;">
+              <el-button type="primary" icon="el-icon-document-add" @click="drawercomingtype=true" size=mini round>新增</el-button>
+            </div>
+          </el-col>
         </el-row>
         <el-table :data="tableComingtype" :height="autoheight">
           <el-table-column prop="itemName" label="内容名称" style="width:100%"> </el-table-column>
@@ -129,5 +145,5 @@ export default dict
 </script>
 
 <style>
-  @import 'dict.css'
+@import 'dict.css'
 </style>

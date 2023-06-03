@@ -11,13 +11,14 @@ export default {
       tableData: [],
       nameSelect: "",
       codeSelect: "",
+      time: [],
     }
   },
   components: {
     companyinfo,
   },
   created() {
-    this.autoheight = window.innerHeight - 250
+    this.autoheight = window.innerHeight * 0.625
     this.getList();
   },
   computed: {

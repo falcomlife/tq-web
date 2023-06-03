@@ -1,26 +1,17 @@
 const path = require("path")
 const webpack = require("webpack")
+const IS_PRODUCTION = process.env.NODE_ENV == "production"; // 正式环境
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-
-const timestamp = new Date().getTime() // 打包时加时间戳
-
 
 module.exports = {
   //部署应用包时的基本 URL
   devServer: {
     port: 8000
   },
-  publicPath: "/",
-  outputDir: process.env.outputDir,
-  lintOnSave: process.env.NODE_ENV !== "production",
-  css: {
-    extract: {
-      Type: true,
-    },
-  },
+  publicPath: "/web",
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({ // webpack自带该插件，无需单独安装
@@ -30,5 +21,11 @@ module.exports = {
       })
     ]
   },
-
+  chainWebpack: config => {
+    if (IS_PRODUCTION) {
+      config.externals({
+        "echarts": "echarts"
+      })
+    }
+  }
 }

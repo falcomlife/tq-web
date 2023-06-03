@@ -124,10 +124,22 @@ export default {
             password: this.loginForm.password
           }
           this.$api.login.login(body).then(res => {
-            console.log(res)
-            this.$store.commit("changeLogin", true)
-            localStorage.setItem("token", res.data.token)
-            this.$router.push("/")
+            if(res.data.status == 200){
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'success'
+              })
+              this.$store.commit("changeLogin", true)
+              localStorage.setItem("token", res.data.token)
+              this.$router.push("/")
+            }else{
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'error'
+              })
+            }
           })
         }
       })
@@ -168,7 +180,7 @@ export default {
   width: 30%;
   padding: 2% 1%;
   margin-top: 10%;
-  margin-left: 35%;
+  margin-left: 33%;
   font-size: 16px;
   color: #909399;
   font-weight: bold;

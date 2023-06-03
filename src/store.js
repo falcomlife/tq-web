@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     netWorkBroke: false,
     isLogin: false,
+    authorities: [],
   },
   mutations: {
     changeNetwork(state,s){
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     changeLogin(state,s){
       state.isLogin = s
+    },
+    authorities(state,s){
+      state.authorities = s
     },
   },
   actions: {},

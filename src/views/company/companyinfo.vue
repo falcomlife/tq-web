@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-tabs :style="{height: autoheight}">
+  <el-tabs>
     <el-tab-pane label="用户管理">
       <user :companyId="companyId"></user>
     </el-tab-pane>
@@ -30,9 +30,6 @@ export default {
     this.companyId = this.$route.query.id
   },
   computed: {
-    autoheight: function() {
-      return (window.innerHeight - 150) + 'px'; //自定义高度需求
-    }
   },
 }
 </script>

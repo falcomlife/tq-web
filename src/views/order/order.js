@@ -83,8 +83,8 @@ export default {
   created() {
     this.getList()
     this.getType()
-    this.autoheight = window.innerHeight - 250
-    this.avatarUrl = this.global.apiUrl + 'outStorage/image'
+    this.autoheight = window.innerHeight *0.55
+    this.avatarUrl = process.env.VUE_APP_BASE_URL + '/outStorage/image'
   },
   computed: {
     scrollerHeight: function() {
@@ -233,8 +233,8 @@ export default {
     handleAddSuccess(res, file) {
       if (res.s == 0) {
         console.log("success")
-        this.$set(this.formout, "image", this.global.apiUrl + file.response.rs)
-        this.formout.image = this.global.apiUrl + file.response.rs
+        this.$set(this.formout, "image", process.env.VUE_APP_BASE_URL + "/images/" + file.response.rs)
+        this.formout.image = process.env.VUE_APP_BASE_URL + "/images/" + file.response.rs
       } else {
         this.$message({
           showClose: true,
@@ -258,8 +258,8 @@ export default {
     handleUpdateSuccess(res, file) {
       if (res.s == 0) {
         console.log("success")
-        this.$set(this.formoutupdate, "image", this.global.apiUrl + file.response.rs)
-        this.formoutupdate.image = this.global.apiUrl + file.response.rs
+        this.$set(this.formoutupdate, "image", process.env.VUE_APP_BASE_URL + "/images/" + file.response.rs)
+        this.formoutupdate.image = process.env.VUE_APP_BASE_URL + "/images/" + file.response.rs
       } else {
         this.$message({
           showClose: true,

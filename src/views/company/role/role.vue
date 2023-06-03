@@ -15,17 +15,21 @@
   <el-row>
     <el-col>
       <el-table :data="tableData" :height="autoheight" @selection-change="onTableSelectChange">
-        <el-table-column type="selection" width=100>
+        <el-table-column type="selection" min-width=10%>
         </el-table-column>
-        <el-table-column prop="name" label="名称" width=400> </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width=400> </el-table-column>
-        <el-table-column label="操作" width=100>
+        <el-table-column prop="name" label="名称" min-width=40%> </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" min-width=40%> </el-table-column>
+        <el-table-column label="操作" min-width=10%>
           <template slot-scope="scope">
+            <el-tooltip class="item" style="margin-right: 10px;" effect="light" content="修改" placement="bottom">
+              <el-button type="primary" icon="el-icon-edit-outline" size="mini" circle @click="updateShow(scope.row)"></el-button>
+            </el-tooltip>
             <el-popover placement="right" width="560" trigger="click">
+              <h3 style="color: #909399;">配置权限</h3>
               <el-table :data="authorityData" heigh="800">
                 <el-table-column prop="inRole" width="60">
                   <template slot-scope="scopeRole">
-                    <el-switch v-model="scopeRole.row.inRole" @change="inRoleChange(scope.row,scopeRole.row)">
+                    <el-switch v-model="scopeRole.row.inRole" @change="(value) => inRoleChange(value,scope.row,scopeRole.row)">
                     </el-switch>
                   </template>
                 </el-table-column>
@@ -40,7 +44,7 @@
                 <el-table-column prop="isEnableName" label="是否启用" width="100">
                 </el-table-column>
               </el-table>
-              <el-button slot="reference" type="primary" icon="el-icon-edit-outline" size="mini" circle @click="getAuthorityList(scope.row)"></el-button>
+              <el-button slot="reference" type="primary" icon="el-icon-key" size="mini" circle @click="getAuthorityList(scope.row)"></el-button>
             </el-popover>
           </template>
         </el-table-column>
@@ -64,6 +68,19 @@
         <el-button type="primary" @click="submitForm()">提交</el-button>
       </el-form-item>
     </el-form>
+  </el-dialog>
+
+  <!-- 修改角色信息 -->
+  <el-dialog title="修改角色信息" :visible.sync="roleDialogFormVisible" width="40%">
+    <el-form ref="userInfoForm" :model="roleForm" label-width="15%" :rules="rules" style="padding: 0% 2%;">
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="roleForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="roleDialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="submitRoleForm()">确 定</el-button>
+    </div>
   </el-dialog>
 
 </div>
@@ -93,9 +110,13 @@ export default {
       code: "",
       info: false,
       dialogVisible: false,
+      roleDialogFormVisible: false,
       formout: {
         name: "",
         companyId: ""
+      },
+      roleForm: {
+        name: ""
       },
       checkboxGroup: [],
       rules: {
@@ -114,7 +135,7 @@ export default {
     }
   },
   created() {
-    this.autoheight = window.innerHeight - 270
+    this.autoheight = window.innerHeight * 0.568
     this.getList()
   },
   updated() {
@@ -133,7 +154,6 @@ export default {
         name: this.name,
         companyId: this.companyId,
       }).then(res => {
-        let totalPrice = 0
         this.tableData = res.data.rs.list
         this.totalRowCount = res.data.rs.totalRowCount
       })
@@ -185,11 +205,12 @@ export default {
         }
       })
     },
-    inRoleChange(row,rowRole){
+    inRoleChange(value,row,rowRole){
       console.log(row,rowRole)
       let body={
         id: row.id,
-        authorityId: rowRole.id
+        authorityId: rowRole.id,
+        authorityFlag: value,
       }
       this.$api.role.addAuthorityToRole(body).then(res => {
         if(res.data.s == 0){
@@ -244,6 +265,22 @@ export default {
     },
     editAuthority(row) {
       console.log(row)
+    },
+    updateShow(row){
+      this.roleForm = row
+      this.roleDialogFormVisible = true
+    },
+    submitRoleForm(){
+      this.$api.role.update(this.roleForm).then(res=>{
+        if(res.data.s == 0){
+          this.$message({
+            showClose: true,
+            message: '修改成功',
+            type: 'success'
+          })
+          this.roleDialogFormVisible = false
+        }
+      })
     }
   }
 }

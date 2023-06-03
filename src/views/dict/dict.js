@@ -34,12 +34,9 @@ export default {
     this.getColorDictList()
     this.getCtDictList()
     this.getComingtypeDictList()
-    this.autoheight = window.innerHeight / 2 - 200
+    this.autoheight = window.innerHeight * 0.302
   },
   computed: {
-    scrollerHeight: function() {
-      return (window.innerHeight - 150) + 'px'; //自定义高度需求
-    }
   },
   methods: {
     getCustomerDictList() {
