@@ -224,7 +224,7 @@
         <el-table-column prop="image" label="产品图片" width=100>
           <template slot-scope="scope">
             <div style="width:50%;height:50%;">
-              <el-image :src="scope.row.image" fit=contain :preview-src-list="[scope.row.image]"></el-image>
+              <el-image :src="scope.row.image" fit=contain :preview-src-list="[scope.row.image]" lazy></el-image>
             </div>
           </template>
         </el-table-column>
@@ -251,7 +251,7 @@
     </el-col>
   </el-row>
   <el-row>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[20, 50, 100, 500]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[5, 20, 100, 500]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
     </el-pagination>
   </el-row>
 </div>

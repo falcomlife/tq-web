@@ -69,11 +69,14 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="出库编号" prop="outStorageId" v-if="formout.incomingType==5">
+                  <el-form-item label="出库编号" prop="outStorageId" v-if="formout.incomingType==5 || formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf' ">
                     <el-select v-model="formout.outStorageId" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
+                  </el-form-item>
+                  <el-form-item label="不良原因" prop="badReason" v-if="formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf'">
+                    <el-input v-model="formout.badReason"></el-input>
                   </el-form-item>
                   <el-form-item label="返镀原因" prop="incomingReason" v-if="formout.incomingType==5">
                     <el-input v-model="formout.incomingReason"></el-input>
@@ -173,11 +176,14 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="出库编号" prop="outStorageCode" v-if="formoutupdate.incomingTypeId==5">
+                  <el-form-item label="出库编号" prop="outStorageCode" v-if="formoutupdate.incomingTypeId==5 || formoutupdate.incomingTypeId==='30bc0ec552cb4a59a23c680362219ecf'">
                     <el-select v-model="formoutupdate.outStorageCode" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
+                  </el-form-item>
+                  <el-form-item label="不良原因" prop="badReason" v-if="formoutupdate.incomingTypeId==='30bc0ec552cb4a59a23c680362219ecf'">
+                    <el-input v-model="formoutupdate.badReason"></el-input>
                   </el-form-item>
                   <el-form-item label="返镀原因" prop="incomingReason" v-if="formoutupdate.incomingTypeId==5">
                     <el-input v-model="formoutupdate.incomingReason"></el-input>
@@ -263,10 +269,6 @@
                   </el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="编号">{{item.code}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="品名">{{item.name}}</el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库镀金颜色">
-                    <font color="red">{{item.color}}</font>
-                  </el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="订单镀金颜色">{{item.orderColor}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="烤厅">{{item.bake}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总个数">{{item.bunchCount}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库数量">
@@ -280,6 +282,16 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="ITEM">{{item.item}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总订单量">{{item.count}}</el-descriptions-item>
                 </el-descriptions>
+                <div>
+                  <div><label style="padding-bottom: 0px;" class="print-font">入库镀金颜色:</label></div>
+                  <div>
+                    <font style="color:red" class="print-font">{{item.color}}</font>
+                  </div>
+                </div>
+                <div>
+                  <div><label style="padding-bottom: 0px;" class="print-font">订单镀金颜色:</label></div>
+                  <div><span class="print-font">{{item.orderColor}}</span></div>
+                </div>
               </div>
             </div>
           </div>
@@ -292,7 +304,7 @@
         <el-table-column prop="image" label="产品图片" width=100>
           <template slot-scope="scope">
             <div style="width:50%;height:50%;">
-              <el-image :src="scope.row.image" fit=contain :preview-src-list="[scope.row.image]"></el-image>
+              <el-image :src="scope.row.image" fit=contain :preview-src-list="[scope.row.image]" lazy></el-image>
             </div>
           </template>
         </el-table-column>
@@ -308,6 +320,7 @@
         <el-table-column prop="unit" label="单位" width=50> </el-table-column>
         <el-table-column prop="inCount" label="入库数量" width=80> </el-table-column>
         <el-table-column prop="incomingType" label="来料类别" width=80> </el-table-column>
+        <el-table-column prop="badReason" label="不良原因" width=80> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=140> </el-table-column>
         <el-table-column label="操作" width=80>
           <template slot-scope="scope">
@@ -320,7 +333,7 @@
     </el-col>
   </el-row>
   <el-row>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[20, 50, 100, 500]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[5, 20, 100, 500]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalRowCount">
     </el-pagination>
   </el-row>
 </div>

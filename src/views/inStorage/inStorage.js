@@ -180,7 +180,7 @@ export default {
         isDelete: "",
       },
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 5,
       totalRowCount: 0,
       idarr: [],
       avatarUrl: '',

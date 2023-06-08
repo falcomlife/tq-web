@@ -9,7 +9,7 @@
               <i class="el-icon-s-data selectlable"></i>
               <span class="boxlable">订单统计</span>
             </el-row>
-            <el-row style="margin-top: 5%;">
+            <el-row style="margin-top: 2%;">
               <el-col :span="6" :style="{height:heightRow1}">
                 <div class="selectlable" >月份：</div>
               </el-col>
@@ -24,7 +24,7 @@
         </el-col>
         <el-col style="padding-top: 10px;padding-left: 10px" :span="12">
           <el-card class="box-card">
-            <el-row style="padding-top:11%;">
+            <el-row style="padding-top:8.5%;">
               <el-col :span="12" :style="{height:heightRow1}">
                 <div  class="numlable">订单数量：</div>
               </el-col>

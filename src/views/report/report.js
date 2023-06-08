@@ -44,10 +44,10 @@ export default {
       return (window.innerHeight * 0.77) + 'px'; //自定义高度需求
     },
     heightRow1: function() {
-      return (window.innerHeight * 0.06) + 'px'; //自定义高度需求
+      return (window.innerHeight * 0.03) + 'px'; //自定义高度需求
     },
     heightRow2: function() {
-      return (window.innerHeight * 0.57) + 'px'; //自定义高度需求
+      return (window.innerHeight * 0.61) + 'px'; //自定义高度需求
     }
   },
   methods: {
