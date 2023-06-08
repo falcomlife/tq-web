@@ -99,28 +99,28 @@
       <span class="selectlable">客户名称</span>
     </el-col>
     <el-col :span="4">
-      <el-select v-model="customerNameSelect" clearable filterable placeholder="请选择">
+      <el-select size=mini v-model="customerNameSelect" clearable filterable placeholder="请选择">
         <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
         </el-option>
       </el-select>
     </el-col>
-    <el-col :span="2">
+    <el-col :span="1">
       <span class="selectlable">编号</span>
     </el-col>
     <el-col :span="4">
-      <el-input style="width:82%;" v-model="codeSelect" placeholder="请输入编号" clearable></el-input>
+      <el-input size=mini style="width:82%;" v-model="codeSelect" placeholder="请输入编号" clearable></el-input>
     </el-col>
     <el-col :span="2">
       <span class="selectlable">时间范围</span>
     </el-col>
     <el-col :span="6">
       <div class="block">
-        <el-date-picker style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+        <el-date-picker size=mini style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
         </el-date-picker>
       </div>
     </el-col>
 
-    <el-col :span="4">
+    <el-col :span="5">
       <el-button-group>
         <el-tooltip class="item" effect="light" content="搜索信息" placement="bottom">
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
@@ -139,13 +139,13 @@
       <span class="selectlable">PO号</span>
     </el-col>
     <el-col :span="4">
-      <el-input style="width:82%;" v-model="poSelect" placeholder="请输入PO号" clearable></el-input>
+      <el-input size=mini style="width:82%;" v-model="poSelect" placeholder="请输入PO号" clearable></el-input>
     </el-col>
-    <el-col :span="2">
+    <el-col :span="1">
       <span class="selectlable">ITEM</span>
     </el-col>
     <el-col :span="4">
-      <el-input style="width:82%;" v-model="itemSelect" placeholder="请输入ITEM" clearable></el-input>
+      <el-input size=mini style="width:82%;" v-model="itemSelect" placeholder="请输入ITEM" clearable></el-input>
     </el-col>
     <el-col :span="8" style="min-height:1px;" >
     </el-col>

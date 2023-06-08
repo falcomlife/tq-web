@@ -34,7 +34,7 @@ export default {
     this.getColorDictList()
     this.getCtDictList()
     this.getComingtypeDictList()
-    this.autoheight = window.innerHeight * 0.302
+    this.autoheight = window.innerHeight * 0.316
   },
   computed: {
   },

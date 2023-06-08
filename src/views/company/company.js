@@ -18,7 +18,7 @@ export default {
     companyinfo,
   },
   created() {
-    this.autoheight = window.innerHeight * 0.625
+    this.autoheight = window.innerHeight * 0.675
     this.getList();
   },
   computed: {

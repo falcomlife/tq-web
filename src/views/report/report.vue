@@ -15,7 +15,7 @@
               </el-col>
               <el-col :span="18" :style="{height:heightRow1}">
                 <div >
-                  <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="ordermonth" @change="orderChange" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
+                  <el-date-picker size=mini value-format="yyyy-MM-dd HH:mm:ss" v-model="ordermonth" @change="orderChange" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
                   </el-date-picker>
                 </div>
               </el-col>
@@ -24,7 +24,7 @@
         </el-col>
         <el-col style="padding-top: 10px;padding-left: 10px" :span="12">
           <el-card class="box-card">
-            <el-row style="padding-top:8.5%;">
+            <el-row style="padding-top:10%;">
               <el-col :span="12" :style="{height:heightRow1}">
                 <div  class="numlable">订单数量：</div>
               </el-col>
@@ -60,7 +60,7 @@
             <span class="selectlable selectrow">月份：</span>
           </el-col>
           <el-col :span="4">
-            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="inStoragemonth" @change="inStorageChange" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
+            <el-date-picker size=mini value-format="yyyy-MM-dd HH:mm:ss" v-model="inStoragemonth" @change="inStorageChange" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
             </el-date-picker>
           </el-col>
         </el-row>

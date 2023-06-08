@@ -216,7 +216,7 @@
       <span class="selectlable">客户名称</span>
     </el-col>
     <el-col :span="4">
-      <el-select v-model="customerNameSelect" clearable filterable placeholder="请选择">
+      <el-select size=mini v-model="customerNameSelect" clearable filterable placeholder="请选择">
         <el-option v-for="item in customerNameOptions" :key="item.id" :label="item.itemName" :value="item.id">
         </el-option>
       </el-select>
@@ -225,18 +225,18 @@
       <span class="selectlable">编号</span>
     </el-col>
     <el-col :span="4">
-      <el-input style="width:80%;" v-model="codeSelect" placeholder="请输入编号" clearable></el-input>
+      <el-input size=mini style="width:80%;" v-model="codeSelect" placeholder="请输入编号" clearable></el-input>
     </el-col>
     <el-col :span="2">
       <span class="selectlable">时间范围</span>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <div class="block">
-        <el-date-picker style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+        <el-date-picker size=mini style="width:80%;" v-model="time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
         </el-date-picker>
       </div>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="6">
       <el-button-group>
         <el-tooltip class="item" effect="light" content="搜索信息" placement="bottom">
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
@@ -253,6 +253,17 @@
       </el-button-group>
     </el-col>
   </el-row>
+  <el-row class="row selectrow">
+    <el-col :span="2">
+      <span class="selectlable">来料类别</span>
+    </el-col>
+    <el-col :span="4">
+      <el-select size=mini v-model="incomingTypeSelect" clearable filterable placeholder="请选择">
+        <el-option v-for="item in incomingTypeOptions" :key="item.id" :label="item.itemName" :value="item.id">
+        </el-option>
+      </el-select>
+    </el-col>
+  </el-row>
   <el-row class="row">
     <el-col :span="24">
       <div style="display: none;">
@@ -267,7 +278,6 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="客户名称">
                     <font color="red">{{item.customerName}}</font>
                   </el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="编号">{{item.code}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="品名">{{item.name}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="烤厅">{{item.bake}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总个数">{{item.bunchCount}}</el-descriptions-item>
@@ -277,6 +287,7 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="来料类别">
                     <el-tag size="small">{{item.incomingType}}</el-tag>
                   </el-descriptions-item>
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="不良原因">{{item.badReason}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="创建时间">{{item.createTime}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="PO#">{{item.poNum}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="ITEM">{{item.item}}</el-descriptions-item>
@@ -320,7 +331,7 @@
         <el-table-column prop="unit" label="单位" width=50> </el-table-column>
         <el-table-column prop="inCount" label="入库数量" width=80> </el-table-column>
         <el-table-column prop="incomingType" label="来料类别" width=80> </el-table-column>
-        <el-table-column prop="badReason" label="不良原因" width=80> </el-table-column>
+        <el-table-column prop="badReason" label="不良原因" width=160> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=140> </el-table-column>
         <el-table-column label="操作" width=80>
           <template slot-scope="scope">

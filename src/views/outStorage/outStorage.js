@@ -178,7 +178,7 @@ export default {
   created() {
     this.getList()
     this.getType()
-    this.autoheight = window.innerHeight * 0.604
+    this.autoheight = window.innerHeight * 0.646
     this.avatarUrl = process.env.VUE_APP_BASE_URL + '/outStorage/image'
   },
   computed: {

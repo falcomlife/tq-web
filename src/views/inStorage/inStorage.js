@@ -74,10 +74,20 @@ export default {
         callback();
       }
     };
+    var badReason = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('不能为空'));
+      } else if (value.length > 20) {
+        return callback(new Error('长度不能超过20'));
+      } else {
+        callback();
+      }
+    };
     return {
       tableData: [],
       tableDataPrint: [],
       customerNameSelect: '',
+      incomingTypeSelect: '',
       customerNameOptions: [],
       colorOptions: [],
       bakeOptions: [],
@@ -233,6 +243,10 @@ export default {
           validator: outStorageCode,
           trigger: 'blur'
         }],
+        badReason: [{
+          validator: badReason,
+          trigger: 'blur'
+        }],
       },
       autoheight: 0,
       pickerOptions: {
@@ -267,7 +281,7 @@ export default {
   created() {
     this.getList()
     this.getType()
-    this.autoheight = window.innerHeight * 0.604
+    this.autoheight = window.innerHeight * 0.577
     this.avatarUrl = process.env.VUE_APP_BASE_URL + '/outStorage/image'
   },
   computed: {
@@ -312,6 +326,7 @@ export default {
           pageIndex: this.pageIndex,
           pageSize: this.pageSize,
           customerNameItem: this.customerNameSelect,
+          incomingTypeItem: this.incomingTypeSelect,
           code: this.codeSelect,
           starttime: start,
           endtime: end
