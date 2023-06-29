@@ -14,6 +14,12 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="订单图片" prop="image">
+                  <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleAddSuccess" :before-upload="beforeAddUpload">
+                    <img v-if="formout.image" :src="formout.image" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  </el-upload>
+                </el-form-item>
                 <el-form-item label="PO#" prop="poNum">
                   <el-input v-model="formout.poNum"></el-input>
                 </el-form-item>
@@ -29,7 +35,10 @@
                 <el-form-item label="数量" prop="count">
                   <el-input type=number v-model="formout.count" @change="formoutValueChange"></el-input>
                 </el-form-item>
-                <el-form-item label="组件数量" prop="partSumCount">
+                <el-form-item label="每套组件数量" prop="partCount">
+                  <el-input type=number v-model="formout.partCount" @change="formoutValueChange"></el-input>
+                </el-form-item>
+                <el-form-item label="组件总数量" prop="partSumCount">
                   <el-input type=number v-model="formout.partSumCount"></el-input>
                 </el-form-item>
                 <el-form-item label="单价" prop="price">
@@ -59,6 +68,12 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="订单图片" prop="image">
+                  <el-upload class="avatar-uploader" :action="avatarUrl" :show-file-list="false" :on-success="handleUpdateSuccess" :before-upload="beforeUpdateUpload">
+                    <img v-if="formoutupdate.image" :src="formoutupdate.image" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  </el-upload>
+                </el-form-item>
                 <el-form-item label="PO#" prop="poNum">
                   <el-input v-model="formoutupdate.poNum"></el-input>
                 </el-form-item>
@@ -73,6 +88,9 @@
                 </el-form-item>
                 <el-form-item label="数量" prop="count">
                   <el-input type=number v-model="formoutupdate.count" @change="formoutupdateValueChange"></el-input>
+                </el-form-item>
+                <el-form-item label="每套组件数量" prop="partCount">
+                  <el-input type=number v-model="formoutupdate.partCount" @change="formoutupdateValueChange"></el-input>
                 </el-form-item>
                 <el-form-item label="组件数量" prop="partSumCount">
                   <el-input type=number v-model="formoutupdate.partSumCount"></el-input>
@@ -129,7 +147,7 @@
           <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small>新增</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="bottom">
-          <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
+          <el-button type="warning" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
         </el-tooltip>
       </el-button-group>
     </el-col>
@@ -195,13 +213,26 @@
           </template>
         </el-table-column>
         <el-table-column prop="customerName" label="客户名称" width=200> </el-table-column>
+        <el-table-column prop="image" label="订单图片" width=100>
+          <template slot-scope="scope">
+            <div style="width:50%;height:50%;">
+              <el-image :src="scope.row.image" fit=contain :preview-src-list="[scope.row.image]" lazy></el-image>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="code" label="编号" width=180> </el-table-column>
         <el-table-column prop="poNum" label="PO#" width=180> </el-table-column>
         <el-table-column prop="item" label="ITEM" width=180> </el-table-column>
         <el-table-column prop="color" label="镀金颜色" width=180> </el-table-column>
         <el-table-column prop="count" label="数量" width=100> </el-table-column>
         <el-table-column prop="partSumCount" label="组件总数" width=100> </el-table-column>
-        <el-table-column prop="partSumCountCal" label="已入库组件总数" width=140> </el-table-column>
+        <el-table-column prop="partSumCountCal" label="已入库组件总数" width=140>
+          <template slot-scope="scope">
+            <font v-if="scope.row.incomingBigger" color="blue">{{scope.row.partSumCountCal}}</font>
+            <font v-else >{{scope.row.partSumCountCal}}</font>
+          </template>
+        </el-table-column>
+        <el-table-column prop="outStroageGoodsSumCount" label="已出库良品组件总数" width=160> </el-table-column>
         <el-table-column prop="replatCount" label="返镀数量" width=100 label-class-name="table-col-label-analy" class-name="table-col-analy"> </el-table-column>
         <el-table-column prop="replatRatio" label="返镀比率(%)" label-class-name="table-col-label-analy" class-name="table-col-analy" width=100> </el-table-column>
         <el-table-column prop="incomingCount" label="来料异常数量" label-class-name="table-col-label-analy" class-name="table-col-analy" width=110></el-table-column>

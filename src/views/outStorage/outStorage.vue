@@ -57,10 +57,10 @@
                 <el-card style="margin-top:3%;">
                   <i class="el-icon-s-order drawer-hard">出库信息</i>
                   <el-divider> </el-divider>
-                  <el-form-item :required=true label="总个数" prop="bunchCount">
+                  <el-form-item :required=true label="组件数" prop="bunchCount">
                     <el-input type=number v-model="formout.bunchCount"></el-input>
                   </el-form-item>
-                  <el-form-item :required=true label="出库数量" prop="outCount">
+                  <el-form-item :required=true label="数量说明" prop="outCount">
                     <el-input v-model="formout.outCount"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="出库类型" prop="outType">
@@ -134,10 +134,10 @@
                 <el-card style="margin-top:3%;">
                   <i class="el-icon-s-order drawer-hard">出库信息</i>
                   <el-divider> </el-divider>
-                  <el-form-item :required=true label="总个数" prop="bunchCount">
+                  <el-form-item :required=true label="组件数" prop="bunchCount">
                     <el-input type=number v-model="formoutupdate.bunchCount"></el-input>
                   </el-form-item>
-                  <el-form-item :required=true label="出库数量" prop="outCount">
+                  <el-form-item :required=true label="数量说明" prop="outCount">
                     <el-input v-model="formoutupdate.outCount"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="出库类型" prop="outType">
@@ -191,7 +191,7 @@
           <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small round>新增</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="bottom">
-          <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
+          <el-button type="warning" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="打印" placement="bottom">
           <el-button type='primary' icon="el-icon-printer" size=small round v-print="print">打印</el-button>
@@ -212,8 +212,8 @@
           <el-table-column prop="bake" label="烤厅" width=50> </el-table-column>
           <el-table-column prop="count" label="总订单量" width=50> </el-table-column>
           <el-table-column prop="outType" label="出库类型" width=50> </el-table-column>
-          <el-table-column prop="bunchCount" label="总个数" width=80> </el-table-column>
-          <el-table-column prop="outCount" label="出库数量" width=80> </el-table-column>
+          <el-table-column prop="bunchCount" label="组件数" width=80> </el-table-column>
+          <el-table-column prop="outCount" label="数量说明" width=80> </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width=100> </el-table-column>
         </el-table>
       </div>
@@ -237,8 +237,8 @@
         <el-table-column prop="count" label="总订单量" width=100> </el-table-column>
         <el-table-column prop="outType" label="出库类型" width=80> </el-table-column>
         <el-table-column prop="inCount" label="入库数量" width=80> </el-table-column>
-        <el-table-column prop="bunchCount" label="总个数" width=70> </el-table-column>
-        <el-table-column prop="outCount" label="出库数量" width=80> </el-table-column>
+        <el-table-column prop="bunchCount" label="组件数" width=70> </el-table-column>
+        <el-table-column prop="outCount" label="数量说明" width=80> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=160> </el-table-column>
         <el-table-column label="操作" width=80>
           <template slot-scope="scope">

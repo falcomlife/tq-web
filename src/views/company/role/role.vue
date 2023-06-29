@@ -135,7 +135,7 @@ export default {
     }
   },
   created() {
-    this.autoheight = window.innerHeight * 0.568
+    this.autoheight = window.innerHeight * 0.605
     this.getList()
   },
   updated() {

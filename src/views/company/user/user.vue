@@ -21,11 +21,11 @@
         <el-table-column type="selection" min-width=10%>
         </el-table-column>
         <el-table-column prop="name" label="姓名" min-width=20%> </el-table-column>
-        <el-table-column prop="account" label="账户" min-width=20%> </el-table-column>
-        <el-table-column prop="code" label="工号" min-width=20%> </el-table-column>
+        <el-table-column prop="account" label="账户" min-width=15%> </el-table-column>
+        <el-table-column prop="code" label="工号" min-width=15%> </el-table-column>
         <el-table-column prop="isLockName" label="是否锁定" min-width=10%> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" min-width=10%> </el-table-column>
-        <el-table-column label="操作" min-width=10%>
+        <el-table-column label="操作" min-width=20%>
           <template slot-scope="scope">
             <el-popover placement="right" width="200" trigger="click">
               <h3 style="color: #909399;">配置角色</h3>
@@ -97,7 +97,7 @@ export default {
     }
   },
   created() {
-    this.autoheight = window.innerHeight * 0.568
+    this.autoheight = window.innerHeight * 0.605
     this.getList()
   },
   updated() {

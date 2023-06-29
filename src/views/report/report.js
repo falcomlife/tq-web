@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       ordermonth: '',
+      ordermonthcustomer: '',
       inStoragemonth: '',
       orderStatistics: 0,
       inStorageStatistics: 0,
@@ -22,12 +23,13 @@ export default {
     data.setMinutes(0);
     data.setSeconds(0);
     data.setMilliseconds(0);
-    let dataStr = jutils.formatDate(data,"YYYY-MM-DD HH:ii:ss")
+    let dataStr = jutils.formatDate(data, "YYYY-MM-DD HH:ii:ss")
     this.ordermonth = dataStr
+    this.ordermonthcustomer = dataStr
     this.inStoragemonth = dataStr
     this.getOrderStatistics()
     this.getOrderStatisticsColor()
-
+    this.getOrderStatisticsCustomer()
     this.$api.login.tokenVail().then(res => {
       if (res.data.s != 0) {
         this.$route.replace('/login')
@@ -48,7 +50,13 @@ export default {
     },
     heightRow2: function() {
       return (window.innerHeight * 0.63) + 'px'; //自定义高度需求
-    }
+    },
+    heightRow3: function() {
+      return (window.innerHeight * 0.05) + 'px'; //自定义高度需求
+    },
+    heightRow4: function() {
+      return (window.innerHeight * 0.84) + 'px'; //自定义高度需求
+    },
   },
   methods: {
     getOrderStatistics() {
@@ -81,7 +89,7 @@ export default {
             let one = [item.ratio, item.count, item.color]
             data.push(one)
           })
-          var myChart = this.$echarts.init(document.getElementById('echartstest'));
+          var myChart = this.$echarts.init(document.getElementById('echartsColorSum'));
           console.log(data)
           var option = {
             dataset: {
@@ -171,9 +179,55 @@ export default {
         }
       })
     },
+    getOrderStatisticsCustomer() {
+      if (this.ordermonthcustomer == null) {
+        this.ordermonthcustomer = 0
+        return
+      }
+      this.$api.report.getOrderStatisticsCustomer({
+        time: this.ordermonthcustomer,
+      }).then(res => {
+        let name = res.data.rs.name
+        let count = res.data.rs.count
+        var chartDom = document.getElementById('echartsCustomerSum');
+        var myChart = this.$echarts.init(chartDom);
+        var option;
+        option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          xAxis: {
+            type: 'category',
+            axisLabel: {
+              interval: 0,
+              rotate: 45
+            },
+            data: name
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [{
+            data: count,
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
+          }]
+        };
+        option && myChart.setOption(option);
+      })
+    },
     orderChange(e) {
       this.getOrderStatistics()
       this.getOrderStatisticsColor()
+    },
+    orderChangeCustomer(e) {
+      this.getOrderStatisticsCustomer()
     },
     inStorageChange(e) {
       this.getInStorageStatistics()

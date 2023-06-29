@@ -22,24 +22,24 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="总个数" prop="bunchCount"></el-table-column>
-      <el-table-column label="入库数量" prop="inCount"></el-table-column>
+      <el-table-column label="组件数" prop="bunchCount"></el-table-column>
+      <el-table-column label="数量说明" prop="inCount"></el-table-column>
       <el-table-column label="创建时间" prop="createTime"></el-table-column>
     </el-table>
 
     <el-table :data="tableOutStoragesData" style="width: 100%" v-if="expandType=='outStoragesByInStorage'" row-class-name="expandtablebody" header-row-class-name="expandtableheader">
       <el-table-column label="编号" prop="code"></el-table-column>
       <el-table-column label="出库类型" prop="outType" > </el-table-column>
-      <el-table-column label="总个数" prop="bunchCount"></el-table-column>
-      <el-table-column label="出库数量" prop="outCount"></el-table-column>
+      <el-table-column label="组件数" prop="bunchCount"></el-table-column>
+      <el-table-column label="数量说明" prop="outCount"></el-table-column>
       <el-table-column label="创建时间" prop="createTime"></el-table-column>
     </el-table>
 
     <el-table :data="tableOutStorageData" style="width: 100%" v-else-if="expandType=='outStorageByInStorage'" row-class-name="expandtablebody" header-row-class-name="expandtableheader">
       <el-table-column label="编号" prop="code"></el-table-column>
       <el-table-column label="出库类型" prop="outType" > </el-table-column>
-      <el-table-column label="总个数" prop="bunchCount"></el-table-column>
-      <el-table-column label="出库数量" prop="outCount"></el-table-column>
+      <el-table-column label="组件数" prop="bunchCount"></el-table-column>
+      <el-table-column label="数量说明" prop="outCount"></el-table-column>
       <el-table-column label="创建时间" prop="createTime"></el-table-column>
     </el-table>
 

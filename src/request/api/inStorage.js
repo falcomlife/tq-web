@@ -6,6 +6,11 @@ const order = {
       params: params
     });
   },
+  exportExcel (params) {
+      return axios.post(`/inStorage/excel`,params,{
+        responseType: 'blob'
+      });
+  },
   getById(params) {
     return axios.get(`/inStorage/id`, {
       params: params

@@ -20,6 +20,11 @@ const order = {
     return axios.get(`/inStorage/statistics/reratio`, {
       params: params
     })
+  },
+  getOrderStatisticsCustomer(params) {
+    return axios.get(`/order/statistics/customer`, {
+      params: params
+    })
   }
 }
 

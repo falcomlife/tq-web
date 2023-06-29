@@ -81,10 +81,10 @@
                   <el-form-item label="返镀原因" prop="incomingReason" v-if="formout.incomingType==5">
                     <el-input v-model="formout.incomingReason"></el-input>
                   </el-form-item>
-                  <el-form-item :required=true label="总个数" prop="bunchCount">
+                  <el-form-item :required=true label="组件数" prop="bunchCount">
                     <el-input type=number v-model="formout.bunchCount"></el-input>
                   </el-form-item>
-                  <el-form-item :required=true label="入库数量" prop="inCount">
+                  <el-form-item :required=true label="数量说明" prop="inCount">
                     <el-input v-model="formout.inCount"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="单位" prop="unit">
@@ -188,7 +188,7 @@
                   <el-form-item label="返镀原因" prop="incomingReason" v-if="formoutupdate.incomingTypeId==5">
                     <el-input v-model="formoutupdate.incomingReason"></el-input>
                   </el-form-item>
-                  <el-form-item :required=true label="总个数" prop="bunchCount">
+                  <el-form-item :required=true label="组件数" prop="bunchCount">
                     <el-input type=number v-model="formoutupdate.bunchCount"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="单位" prop="unitId">
@@ -197,7 +197,7 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item :required=true label="入库数量" prop="inCount">
+                  <el-form-item :required=true label="数量说明" prop="inCount">
                     <el-input v-model="formoutupdate.inCount"></el-input>
                   </el-form-item>
                   <el-form-item>
@@ -245,7 +245,7 @@
           <el-button type="primary" icon="el-icon-document-add" @click="add()" size=small round>新增</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="bottom">
-          <el-button type="primary" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
+          <el-button type="warning" icon="el-icon-document-remove" @click="remove()" size=small round >删除</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="打印" placement="bottom">
           <el-button type='primary' icon="el-icon-printer" size=small round v-print="print">打印</el-button>
@@ -263,6 +263,15 @@
         </el-option>
       </el-select>
     </el-col>
+    <el-col :span="12" style="min-height:1px;" >
+    </el-col>
+    <el-col :span="6">
+      <el-button-group>
+        <el-tooltip class="item" effect="light" content="导出" placement="bottom">
+          <el-button type='primary' icon="el-icon-printer" size=small round @click="exportExcel()">导出</el-button>
+        </el-tooltip>
+      </el-button-group>
+    </el-col>
   </el-row>
   <el-row class="row">
     <el-col :span="24">
@@ -278,10 +287,11 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="客户名称">
                     <font color="red">{{item.customerName}}</font>
                   </el-descriptions-item>
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="编号">{{item.code}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="品名">{{item.name}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="烤厅">{{item.bake}}</el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="总个数">{{item.bunchCount}}</el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库数量">
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="组件数">{{item.bunchCount}}</el-descriptions-item>
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="数量说明">
                     <font color="red">{{item.inCount}}</font>
                   </el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="来料类别">
@@ -327,9 +337,9 @@
         <el-table-column prop="color" label="入库镀金颜色" width=110> </el-table-column>
         <el-table-column prop="bake" label="烤厅" width=60> </el-table-column>
         <el-table-column prop="count" label="总订单量" width=100> </el-table-column>
-        <el-table-column prop="bunchCount" label="总个数" width=70> </el-table-column>
+        <el-table-column prop="bunchCount" label="组件数" width=70> </el-table-column>
         <el-table-column prop="unit" label="单位" width=50> </el-table-column>
-        <el-table-column prop="inCount" label="入库数量" width=80> </el-table-column>
+        <el-table-column prop="inCount" label="数量说明" width=80> </el-table-column>
         <el-table-column prop="incomingType" label="来料类别" width=80> </el-table-column>
         <el-table-column prop="badReason" label="不良原因" width=160> </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width=140> </el-table-column>

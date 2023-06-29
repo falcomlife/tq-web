@@ -16,19 +16,25 @@ export default {
       totalPrice: 0,
       formout: {
         customerName: '',
+        image: '',
         poNum: '',
         item: '',
         color: '',
         count: '',
+        partCount: '',
+        partSumCount: '',
         price: '',
         sum: '',
       },
       formoutupdate: {
         customerName: '',
+        image: '',
         poNum: '',
         item: '',
         color: '',
         count: '',
+        partCount: '',
+        partSumCount: '',
         price: '',
         sum: '',
       },
@@ -270,22 +276,25 @@ export default {
     },
     beforeUpdateUpload(file) {
       const isJPG = file.type === 'image/jpeg/png';
-      const isLt2M = file.size / 1024 / 1024 < 10;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       // if (!isJPG) {
       //   this.$message.error('上传头像图片只能是 JPG 或PNG格式!');
       // }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 10MB!');
+        this.$message.error('上传头像图片大小不能超过 1MB!');
       }
       //return isJPG && isLt2M;
       return isLt2M;
     },
     formoutValueChange() {
       this.formout.sum = this.calculate(this.formout.count * this.formout.price)
+      this.formout.partSumCount = this.calculate(this.formout.count * this.formout.partCount)
+      console.log("~~~",this.formout.partSumCount)
+
     },
     formoutupdateValueChange() {
       this.formoutupdate.sum = this.calculate(this.formoutupdate.count * this.formoutupdate.price)
-      console.log(this.formoutupdate)
+      this.formoutupdate.partSumCount = this.calculate(this.formoutupdate.count * this.formoutupdate.partCount)
     },
     calculate(value) {
       const precision = 14

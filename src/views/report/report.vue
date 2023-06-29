@@ -11,10 +11,10 @@
             </el-row>
             <el-row style="margin-top: 2%;">
               <el-col :span="6" :style="{height:heightRow1}">
-                <div class="selectlable" >月份：</div>
+                <div class="selectlable">月份：</div>
               </el-col>
               <el-col :span="18" :style="{height:heightRow1}">
-                <div >
+                <div>
                   <el-date-picker size=mini value-format="yyyy-MM-dd HH:mm:ss" v-model="ordermonth" @change="orderChange" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
                   </el-date-picker>
                 </div>
@@ -26,7 +26,7 @@
           <el-card class="box-card">
             <el-row style="padding-top:10%;">
               <el-col :span="12" :style="{height:heightRow1}">
-                <div  class="numlable">订单数量：</div>
+                <div class="numlable">订单数量：</div>
               </el-col>
               <el-col :span="12" :style="{height:heightRow1}">
                 <div style="width: 90%;" class="numlable">{{this.orderStatistics}}</div>
@@ -44,7 +44,7 @@
                     <el-table-column prop="count" label="总额（元）" sortable width="80">
                     </el-table-column>
                   </el-table> -->
-            <div style="width: 100%;" :style="{height:heightRow2}" id="echartstest"></div>
+            <div style="width: 100%;" :style="{height:heightRow2}" id="echartsColorSum"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -97,6 +97,30 @@
           </el-col>
         </el-row>
       </el-card>
+    </el-col>
+  </el-row>
+  <el-row>
+    <el-col style="padding-top: 20px;padding-left: 10px" :span="24">
+      <el-col :span="24">
+        <el-card class="box-card">
+          <el-row :style="{height: heightRow3}">
+            <el-col :span="2">
+              <div class="selectlable">月份：</div>
+            </el-col>
+            <el-col :span="22">
+              <div>
+                <el-date-picker size=mini value-format="yyyy-MM-dd HH:mm:ss" v-model="ordermonthcustomer" @change="orderChangeCustomer" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
+                </el-date-picker>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <div style="width: 100%;" :style="{height:heightRow4}" id="echartsCustomerSum"></div>
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-col>
     </el-col>
   </el-row>
 </div>

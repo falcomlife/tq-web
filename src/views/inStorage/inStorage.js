@@ -502,12 +502,12 @@ export default {
     },
     beforeUpdateUpload(file) {
       const isJPG = file.type === 'image/jpeg/png';
-      const isLt2M = file.size / 1024 / 1024 < 10;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       // if (!isJPG) {
       //   this.$message.error('上传头像图片只能是 JPG 或PNG格式!');
       // }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 10MB!');
+        this.$message.error('上传头像图片大小不能超过 1MB!');
       }
       //return isJPG && isLt2M;
       return isLt2M;
@@ -590,5 +590,39 @@ export default {
     outStorageCodeChange() {
       this.formoutupdate.tempOutStorageId = this.formoutupdate.outStorageCode
     },
+    exportExcel() {
+      let start = ''
+      let end = ''
+      if (this.time != null && this.time.length == 2) {
+        start = moment(this.time[0]).format('YYYY-MM-DD HH:mm:ss')
+        end = moment(this.time[1]).format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.$api.inStorage.exportExcel({
+        customerNameItem: this.customerNameSelect,
+        incomingType: this.incomingTypeSelect,
+        code: this.codeSelect,
+        starttime: start,
+        endtime: end
+      }).then(
+        res => {
+          var blob = new Blob([res.data], {
+            type: `application/vnd.ms-excel`
+          })
+          const link = document.createElement('a')
+          const name = `入库明细.xlsx`
+          link.style.display = 'none'
+          link.href = URL.createObjectURL(blob)
+          link.setAttribute('download', name)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          this.$message({
+            title: '成功',
+            message: '导出成功！',
+            type: 'success',
+            duration: 1000
+          })
+        })
+    }
   }
 }
