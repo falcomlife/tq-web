@@ -222,6 +222,34 @@ export default {
         option && myChart.setOption(option);
       })
     },
+    exportOrderStatisticsCustomerExcel() {
+      if (this.ordermonthcustomer == null) {
+        this.ordermonthcustomer = 0
+        return
+      }
+      this.$api.report.getOrderStatisticsCustomerExcel({
+        time: this.ordermonthcustomer,
+      }).then(
+        res => {
+          var blob = new Blob([res.data], {
+            type: `application/vnd.ms-excel`
+          })
+          const link = document.createElement('a')
+          const name = `月客户金额明细.xlsx`
+          link.style.display = 'none'
+          link.href = URL.createObjectURL(blob)
+          link.setAttribute('download', name)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          this.$message({
+            title: '成功',
+            message: '导出成功！',
+            type: 'success',
+            duration: 1000
+          })
+        })
+    },
     orderChange(e) {
       this.getOrderStatistics()
       this.getOrderStatisticsColor()

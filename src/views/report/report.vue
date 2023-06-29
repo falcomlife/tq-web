@@ -107,11 +107,14 @@
             <el-col :span="2">
               <div class="selectlable">月份：</div>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="20">
               <div>
                 <el-date-picker size=mini value-format="yyyy-MM-dd HH:mm:ss" v-model="ordermonthcustomer" @change="orderChangeCustomer" type="month" align="right" unlink-panels range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
                 </el-date-picker>
               </div>
+            </el-col>
+            <el-col :span="2">
+              <el-button type='primary' icon="el-icon-printer" size=small round @click="exportOrderStatisticsCustomerExcel()">导出</el-button>
             </el-col>
           </el-row>
           <el-row>

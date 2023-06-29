@@ -25,7 +25,13 @@ const order = {
     return axios.get(`/order/statistics/customer`, {
       params: params
     })
-  }
+  },
+  getOrderStatisticsCustomerExcel(params) {
+      return axios.get(`/order/statistics/customer/excel`,{
+        params: params,
+        responseType: 'blob'
+      });
+  },
 }
 
 export default order;
