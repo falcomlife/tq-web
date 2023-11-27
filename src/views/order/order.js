@@ -159,12 +159,13 @@ export default {
     },
     info(row) {
       this.drawerupdate = true
-      this.formoutupdate = row
+      this.formoutupdate = { ...row }
+      this.formoutsource = { ...row }
     },
     submitForm() {
       this.$refs['formout'].validate((valid) => {
         if (valid) {
-          this.$api.order.save(this.formout)
+          this.$api.processModify.save(this.formout)
             .then(res => {
               if (res.data.s == "0") {
                 this.$message({
@@ -186,28 +187,64 @@ export default {
         }
       })
     },
+    // 直接修改，弃用
+    // submitFormUpdate() {
+    //   this.$refs['formoutupdate'].validate((valid) => {
+    //     if (valid) {
+    //       this.$api.order.update(this.formoutupdate)
+    //         .then(res => {
+    //           if (res.data.s == "0") {
+    //             this.$message({
+    //               showClose: true,
+    //               message: '修改成功',
+    //               type: 'success'
+    //             });
+    //             this.getList()
+    //             this.drawerupdate = false
+    //           } else {
+    //             this.$message({
+    //               showClose: true,
+    //               message: res.data.rs,
+    //               type: 'error'
+    //             });
+    //           }
+    //           this.$refs['formoutupdate'].resetFields();
+    //         })
+    //     }
+    //   })
+    // },
+    // 提交修改，创建审批流程
     submitFormUpdate() {
       this.$refs['formoutupdate'].validate((valid) => {
         if (valid) {
-          this.$api.order.update(this.formoutupdate)
-            .then(res => {
-              if (res.data.s == "0") {
-                this.$message({
-                  showClose: true,
-                  message: '修改成功',
-                  type: 'success'
-                });
-                this.getList()
-                this.drawerupdate = false
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: res.data.rs,
-                  type: 'error'
-                });
-              }
-              this.$refs['formoutupdate'].resetFields();
-            })
+          let common = this.formoutupdate.common
+          let source= JSON.stringify(this.formoutsource);
+          let target= JSON.stringify(this.formoutupdate);
+          let process = {
+            source: source,
+            target: target,
+            type: 1,
+            common: common
+          }
+          this.$api.processModify.save(process)
+              .then(res => {
+                if (res.data.s == "0") {
+                  this.$message({
+                    showClose: true,
+                    message: '提交成功',
+                    type: 'success'
+                  });
+                  this.getList()
+                  this.drawerupdate = false
+                } else {
+                  this.$message({
+                    showClose: true,
+                    message: res.data.rs,
+                    type: 'error'
+                  });
+                }
+                this.$refs['formoutupdate'].resetFields();
+              })
         }
       })
     },
