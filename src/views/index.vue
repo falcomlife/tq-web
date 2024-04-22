@@ -269,10 +269,10 @@ export default {
       })
     },
     menuItemEnter(event, id) {
-      this.$refs.[id].$el.style.cssText = "background-color: #bfc9d4;border-radius: 10px;box-shadow: 0px 0px 8px #ccc;"
+      this.$refs[id].$el.style.cssText = "background-color: #bfc9d4;border-radius: 10px;box-shadow: 0px 0px 8px #ccc;"
     },
     menuItemLeave(event, id) {
-      this.$refs.[id].$el.style.cssText = ""
+      this.$refs[id].$el.style.cssText = ""
     },
     menuSelect(keyPath){
       sessionStorage.setItem("keyPath",keyPath)
