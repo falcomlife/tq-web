@@ -40,6 +40,11 @@
               <i class="el-icon-caret-top"></i><span class="self-menu-item">出库管理</span>
             </div>
           </el-menu-item>
+          <el-menu-item ref="meunItemOut" v-if="this.authorities.indexOf('M-7') != -1" index="/processModify">
+            <div @mouseenter="menuItemEnter($event,'meunItemOut')" @mouseleave="menuItemLeave($event,'meunItemOut')">
+              <i class="el-icon-caret-top"></i><span class="self-menu-item">流程管理</span>
+            </div>
+          </el-menu-item>
           <el-menu-item ref="meunItemCustomer" v-if="this.authorities.indexOf('M-6') != -1" index="/company">
             <div @mouseenter="menuItemEnter($event,'meunItemCustomer')" @mouseleave="menuItemLeave($event,'meunItemCustomer')">
               <i class="el-icon-s-custom"></i><span class="self-menu-item">客户公司</span>
@@ -269,10 +274,10 @@ export default {
       })
     },
     menuItemEnter(event, id) {
-      this.$refs.[id].$el.style.cssText = "background-color: #bfc9d4;border-radius: 10px;box-shadow: 0px 0px 8px #ccc;"
+      this.$refs[id].$el.style.cssText = "background-color: #bfc9d4;border-radius: 10px;box-shadow: 0px 0px 8px #ccc;"
     },
     menuItemLeave(event, id) {
-      this.$refs.[id].$el.style.cssText = ""
+      this.$refs[id].$el.style.cssText = ""
     },
     menuSelect(keyPath){
       sessionStorage.setItem("keyPath",keyPath)

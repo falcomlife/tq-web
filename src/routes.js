@@ -1,6 +1,7 @@
 import order from './views/order/order.vue';
 import inStorage from './views/inStorage/inStorage.vue';
 import outStorage from './views/outStorage/outStorage.vue';
+import processModify from './views/processModify/processModify.vue';
 import company from './views/company/company.vue';
 import companyinfo from './views/company/companyinfo.vue';
 import dict from './views/dict/dict.vue';
@@ -50,6 +51,14 @@ export default new Router({
       component: outStorage,
       meta: {
         title: 'outStorage',
+        keepAlive: true
+      }
+    },
+    {
+      path: '/processModify',
+      component: processModify,
+      meta: {
+        title: 'processModify',
         keepAlive: true
       }
     },

@@ -92,7 +92,7 @@
                 <el-form-item label="每套组件数量" prop="partCount">
                   <el-input type=number v-model="formoutupdate.partCount" @change="formoutupdateValueChange"></el-input>
                 </el-form-item>
-                <el-form-item label="组件数量" prop="partSumCount">
+                <el-form-item label="组件总数量" prop="partSumCount">
                   <el-input type=number v-model="formoutupdate.partSumCount"></el-input>
                 </el-form-item>
                 <el-form-item label="单价" prop="price">
@@ -100,6 +100,9 @@
                 </el-form-item>
                 <el-form-item label="合计" prop="sum">
                   <el-input type=number v-model="formoutupdate.sum"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="common">
+                  <el-input v-model="formoutupdate.common"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="submitFormUpdate()">提交修改</el-button>
@@ -143,10 +146,13 @@
         <el-tooltip class="item" effect="light" content="搜索信息" placement="bottom">
           <el-button type="primary" icon="el-icon-search" @click="getList()" size=small round>搜索</el-button>
         </el-tooltip>
-        <el-tooltip class="item" effect="light" content="新增订单信息" placement="bottom">
+        <el-tooltip v-if="$store.state.authorities.indexOf('B-2') != -1" class="item" effect="light" content="新增订单信息" placement="bottom">
           <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small>新增</el-button>
         </el-tooltip>
-        <el-tooltip class="item" effect="light" content="删除" placement="bottom">
+        <el-tooltip v-if="$store.state.authorities.indexOf('B-2') == -1" class="item" effect="light" content="新增订单信息" placement="bottom">
+          <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small round>新增</el-button>
+        </el-tooltip>
+        <el-tooltip v-if="$store.state.authorities.indexOf('B-2') != -1" class="item" effect="light" content="删除" placement="bottom">
           <el-button type="warning" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
         </el-tooltip>
       </el-button-group>
@@ -228,11 +234,16 @@
         <el-table-column prop="partSumCount" label="组件总数" width=100> </el-table-column>
         <el-table-column prop="partSumCountCal" label="已入库组件总数" width=140>
           <template slot-scope="scope">
-            <font v-if="scope.row.incomingBigger" color="blue">{{scope.row.partSumCountCal}}</font>
+            <font v-if="scope.row.incomingBigger" color="red">{{scope.row.partSumCountCal}}</font>
             <font v-else >{{scope.row.partSumCountCal}}</font>
           </template>
         </el-table-column>
-        <el-table-column prop="outStroageGoodsSumCount" label="已出库良品组件总数" width=160> </el-table-column>
+        <el-table-column prop="outStroageGoodsSumCount" label="已出库良品组件总数" width=160>
+          <template slot-scope="scope">
+            <font v-if="scope.row.outStorageBigger" color="red">{{scope.row.outStroageGoodsSumCount}}</font>
+            <font v-else >{{scope.row.outStroageGoodsSumCount}}</font>
+          </template>
+        </el-table-column>
         <el-table-column prop="replatCount" label="返镀数量" width=100 label-class-name="table-col-label-analy" class-name="table-col-analy"> </el-table-column>
         <el-table-column prop="replatRatio" label="返镀比率(%)" label-class-name="table-col-label-analy" class-name="table-col-analy" width=100> </el-table-column>
         <el-table-column prop="incomingCount" label="来料异常数量" label-class-name="table-col-label-analy" class-name="table-col-analy" width=110></el-table-column>

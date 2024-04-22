@@ -299,10 +299,6 @@ export default {
   line-height: 40px;
 }
 
-.table-col-analy {
-  color: #ff0000;
-}
-
 .table-col-label-analy {
   color: #909399;
 }

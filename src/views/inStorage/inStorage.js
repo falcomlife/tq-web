@@ -188,6 +188,7 @@ export default {
         createTime: "",
         modifiedTime: "",
         isDelete: "",
+        common: ""
       },
       pageIndex: 1,
       pageSize: 5,
@@ -368,7 +369,8 @@ export default {
     },
     info(row) {
       this.drawerupdate = true
-      this.formoutupdate = row
+      this.formoutupdate = { ...row }
+      this.formoutsource = { ...row }
       this.getOutStorageByCode(null, this.formoutupdate.orderId, this.formoutupdate.item, false)
     },
     submitForm() {
@@ -400,38 +402,72 @@ export default {
         }
       })
     },
+    // submitFormUpdate() {
+    //   this.$refs['formoutupdate'].validate((valid) => {
+    //     if (valid) {
+    //       if (typeof this.formoutupdate.tempOrderId != "undefined") {
+    //         this.formoutupdate.orderId = this.formoutupdate.tempOrderId
+    //       }
+    //       if (typeof this.formoutupdate.tempOutStorageId != "undefined") {
+    //         this.formoutupdate.outStorageId = this.formoutupdate.tempOutStorageId
+    //       }
+    //       this.$api.inStorage.update(this.formoutupdate)
+    //         .then(res => {
+    //           if (res.data.s == "0") {
+    //             this.$message({
+    //               showClose: true,
+    //               message: '修改成功',
+    //               type: 'success'
+    //             });
+    //             this.getList()
+    //             this.drawerupdate = false
+    //           } else {
+    //             this.$message({
+    //               showClose: true,
+    //               message: res.data.rs,
+    //               type: 'error'
+    //             });
+    //           }
+    //           this.$refs['formoutupdate'].resetFields();
+    //         })
+    //         .catch(function(error) {
+    //           console.log(error)
+    //           this.$refs['formoutupdate'].resetFields();
+    //         })
+    //     }
+    //   })
+    // },
     submitFormUpdate() {
       this.$refs['formoutupdate'].validate((valid) => {
         if (valid) {
-          if (typeof this.formoutupdate.tempOrderId != "undefined") {
-            this.formoutupdate.orderId = this.formoutupdate.tempOrderId
+          let common = this.formoutupdate.common
+          let source= JSON.stringify(this.formoutsource);
+          let target= JSON.stringify(this.formoutupdate);
+          let process = {
+            source: source,
+            target: target,
+            type: 2,
+            common: common
           }
-          if (typeof this.formoutupdate.tempOutStorageId != "undefined") {
-            this.formoutupdate.outStorageId = this.formoutupdate.tempOutStorageId
-          }
-          this.$api.inStorage.update(this.formoutupdate)
-            .then(res => {
-              if (res.data.s == "0") {
-                this.$message({
-                  showClose: true,
-                  message: '修改成功',
-                  type: 'success'
-                });
-                this.getList()
-                this.drawerupdate = false
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: res.data.rs,
-                  type: 'error'
-                });
-              }
-              this.$refs['formoutupdate'].resetFields();
-            })
-            .catch(function(error) {
-              console.log(error)
-              this.$refs['formoutupdate'].resetFields();
-            })
+          this.$api.processModify.save(process)
+              .then(res => {
+                if (res.data.s == "0") {
+                  this.$message({
+                    showClose: true,
+                    message: '提交成功',
+                    type: 'success'
+                  });
+                  this.getList()
+                  this.drawerupdate = false
+                } else {
+                  this.$message({
+                    showClose: true,
+                    message: res.data.rs,
+                    type: 'error'
+                  });
+                }
+                this.$refs['formoutupdate'].resetFields();
+              })
         }
       })
     },

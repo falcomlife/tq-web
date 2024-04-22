@@ -123,6 +123,7 @@ export default {
         createTime: "",
         modifiedTime: "",
         isDelete: "",
+        common: ""
       },
       pageIndex: 1,
       pageSize: 5,
@@ -245,7 +246,10 @@ export default {
     },
     info(row) {
       this.drawerupdate = true
-      this.formoutupdate = row
+      this.formoutupdate = { ...row }
+      this.formoutupdate.partCount = this.formoutupdate.partSumCount/this.formoutupdate.count
+      this.formoutsource = { ...row }
+      this.formoutsource.partCount = this.formoutsource.partSumCount/this.formoutsource.count
     },
     submitForm(form) {
       this.$refs['formout'].validate((valid) => {
@@ -272,38 +276,72 @@ export default {
         }
       })
     },
+    // submitFormUpdate() {
+    //   console.log("this.formoutupdate",11)
+    //   this.$refs['formoutupdate'].validate((valid) => {
+    //     if (valid) {
+    //       if (typeof this.formoutupdate.tempInStorageId != "undefined") {
+    //         this.formoutupdate.inStorageId = this.formoutupdate.tempInStorageId
+    //       }
+    //       this.formoutupdate.outType = this.formoutupdate.outTypeId
+    //       console.log("this.formoutupdate",this.formoutupdate)
+    //       this.$api.outStorage.update(this.formoutupdate)
+    //         .then(res => {
+    //           if (res.data.s == "0") {
+    //             this.$message({
+    //               showClose: true,
+    //               message: '修改成功',
+    //               type: 'success'
+    //             });
+    //             this.getList()
+    //             this.drawerupdate = false
+    //           } else {
+    //             this.$message({
+    //               showClose: true,
+    //               message: res.data.rs,
+    //               type: 'error'
+    //             });
+    //           }
+    //           this.formoutupdate = this.formmodule
+    //         })
+    //         .catch(function(error) {
+    //           console.log(error)
+    //           this.formoutupdate = this.formmodule
+    //         })
+    //     }
+    //   })
+    // },
     submitFormUpdate() {
-      console.log("this.formoutupdate",11)
       this.$refs['formoutupdate'].validate((valid) => {
         if (valid) {
-          if (typeof this.formoutupdate.tempInStorageId != "undefined") {
-            this.formoutupdate.inStorageId = this.formoutupdate.tempInStorageId
+          let common = this.formoutupdate.common
+          let source= JSON.stringify(this.formoutsource);
+          let target= JSON.stringify(this.formoutupdate);
+          let process = {
+            source: source,
+            target: target,
+            type: 3,
+            common: common
           }
-          this.formoutupdate.outType = this.formoutupdate.outTypeId
-          console.log("this.formoutupdate",this.formoutupdate)
-          this.$api.outStorage.update(this.formoutupdate)
-            .then(res => {
-              if (res.data.s == "0") {
-                this.$message({
-                  showClose: true,
-                  message: '修改成功',
-                  type: 'success'
-                });
-                this.getList()
-                this.drawerupdate = false
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: res.data.rs,
-                  type: 'error'
-                });
-              }
-              this.formoutupdate = this.formmodule
-            })
-            .catch(function(error) {
-              console.log(error)
-              this.formoutupdate = this.formmodule
-            })
+          this.$api.processModify.save(process)
+              .then(res => {
+                if (res.data.s == "0") {
+                  this.$message({
+                    showClose: true,
+                    message: '提交成功',
+                    type: 'success'
+                  });
+                  this.getList()
+                  this.drawerupdate = false
+                } else {
+                  this.$message({
+                    showClose: true,
+                    message: res.data.rs,
+                    type: 'error'
+                  });
+                }
+                this.$refs['formoutupdate'].resetFields();
+              })
         }
       })
     },

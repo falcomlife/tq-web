@@ -8,6 +8,7 @@ import login from '@/request/api/login'
 import user from '@/request/api/user'
 import role from '@/request/api/role'
 import authority from '@/request/api/authority'
+import processModify from "@/request/api/processModify";
 
 
 // 导出接口
@@ -21,5 +22,6 @@ export default {
   company,
   user,
   role,
-  authority
+  authority,
+  processModify
 }

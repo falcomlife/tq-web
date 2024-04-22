@@ -69,16 +69,16 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="出库编号" prop="outStorageId" v-if="formout.incomingType==5 || formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf' ">
+                  <el-form-item label="出库编号" prop="outStorageId" v-show="formout.incomingType==5 || formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf' ">
                     <el-select v-model="formout.outStorageId" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="不良原因" prop="badReason" v-if="formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf'">
+                  <el-form-item label="不良原因" prop="badReason" v-show="formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf'">
                     <el-input v-model="formout.badReason"></el-input>
                   </el-form-item>
-                  <el-form-item label="返镀原因" prop="incomingReason" v-if="formout.incomingType==5">
+                  <el-form-item label="返镀原因" prop="incomingReason" v-show="formout.incomingType==5">
                     <el-input v-model="formout.incomingReason"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="组件数" prop="bunchCount">
@@ -200,6 +200,9 @@
                   <el-form-item :required=true label="数量说明" prop="inCount">
                     <el-input v-model="formoutupdate.inCount"></el-input>
                   </el-form-item>
+                  <el-form-item label="备注" prop="common">
+                    <el-input v-model="formoutupdate.common"></el-input>
+                  </el-form-item>
                   <el-form-item>
                     <el-button type="primary" @click="submitFormUpdate()">提交修改</el-button>
                   </el-form-item>
@@ -244,7 +247,7 @@
         <el-tooltip class="item" effect="light" content="新增入库信息" placement="bottom">
           <el-button type="primary" icon="el-icon-document-add" @click="add()" size=small round>新增</el-button>
         </el-tooltip>
-        <el-tooltip class="item" effect="light" content="删除" placement="bottom">
+        <el-tooltip v-if="$store.state.authorities.indexOf('B-3') != -1" class="item" effect="light" content="删除" placement="bottom">
           <el-button type="warning" icon="el-icon-document-remove" @click="remove()" size=small round >删除</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="打印" placement="bottom">
@@ -287,7 +290,8 @@
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="客户名称">
                     <font color="red">{{item.customerName}}</font>
                   </el-descriptions-item>
-                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="编号">{{item.code}}</el-descriptions-item>
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="入库号">{{item.code}}</el-descriptions-item>
+                  <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="订单号">{{item.orderCode}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="品名">{{item.name}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="烤厅">{{item.bake}}</el-descriptions-item>
                   <el-descriptions-item content-class-name="self-descriptions-item" label-class-name="self-descriptions-item" label="组件数">{{item.bunchCount}}</el-descriptions-item>
