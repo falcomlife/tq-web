@@ -69,16 +69,16 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="出库编号" prop="outStorageId" v-if="formout.incomingType==5 || formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf' ">
+                  <el-form-item label="出库编号" prop="outStorageId" v-show="formout.incomingType==5 || formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf' ">
                     <el-select v-model="formout.outStorageId" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="不良原因" prop="badReason" v-if="formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf'">
+                  <el-form-item label="不良原因" prop="badReason" v-show="formout.incomingType==='30bc0ec552cb4a59a23c680362219ecf'">
                     <el-input v-model="formout.badReason"></el-input>
                   </el-form-item>
-                  <el-form-item label="返镀原因" prop="incomingReason" v-if="formout.incomingType==5">
+                  <el-form-item label="返镀原因" prop="incomingReason" v-show="formout.incomingType==5">
                     <el-input v-model="formout.incomingReason"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="组件数" prop="bunchCount">
@@ -176,16 +176,16 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="出库编号" prop="outStorageCode" v-if="formoutupdate.incomingTypeId==5 || formoutupdate.incomingTypeId==='30bc0ec552cb4a59a23c680362219ecf'">
+                  <el-form-item label="出库编号" prop="outStorageCode" v-show="formoutupdate.incomingTypeId==5 || formoutupdate.incomingTypeId==='30bc0ec552cb4a59a23c680362219ecf'">
                     <el-select v-model="formoutupdate.outStorageCode" filterable reserve-keyword placeholder="请输入订单编号" :loading="outStorageLoading" @change="outStorageCodeChange">
                       <el-option v-for="item in outStorageCodeOptions" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="不良原因" prop="badReason" v-if="formoutupdate.incomingTypeId==='30bc0ec552cb4a59a23c680362219ecf'">
+                  <el-form-item label="不良原因" prop="badReason" v-show="formoutupdate.incomingTypeId==='30bc0ec552cb4a59a23c680362219ecf'">
                     <el-input v-model="formoutupdate.badReason"></el-input>
                   </el-form-item>
-                  <el-form-item label="返镀原因" prop="incomingReason" v-if="formoutupdate.incomingTypeId==5">
+                  <el-form-item label="返镀原因" prop="incomingReason" v-show="formoutupdate.incomingTypeId==5">
                     <el-input v-model="formoutupdate.incomingReason"></el-input>
                   </el-form-item>
                   <el-form-item :required=true label="组件数" prop="bunchCount">
