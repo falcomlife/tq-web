@@ -163,12 +163,11 @@ export default {
       this.formoutupdate.partCount = this.formoutupdate.partSumCount/this.formoutupdate.count
       this.formoutsource = { ...row }
       this.formoutsource.partCount = this.formoutsource.partSumCount/this.formoutsource.count
-
     },
     submitForm() {
       this.$refs['formout'].validate((valid) => {
         if (valid) {
-          this.$api.order.save(this.formout)
+          this.$api.processModify.save(this.formout)
             .then(res => {
               if (res.data.s == "0") {
                 this.$message({
