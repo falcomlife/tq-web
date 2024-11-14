@@ -149,10 +149,7 @@
         <el-tooltip v-if="$store.state.authorities.indexOf('B-2') != -1" class="item" effect="light" content="新增订单信息" placement="bottom">
           <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small>新增</el-button>
         </el-tooltip>
-        <el-tooltip v-if="$store.state.authorities.indexOf('B-2') == -1" class="item" effect="light" content="新增订单信息" placement="bottom">
-          <el-button type="primary" icon="el-icon-document-add" @click="draweradd=true" size=small round>新增</el-button>
-        </el-tooltip>
-        <el-tooltip v-if="$store.state.authorities.indexOf('B-2') != -1" class="item" effect="light" content="删除" placement="bottom">
+        <el-tooltip  v-show="$store.state.authorities.indexOf('B-2') != -1" class="item" effect="light" content="删除" placement="bottom">
           <el-button type="warning" icon="el-icon-document-remove" @click="remove()" size=small round>删除</el-button>
         </el-tooltip>
       </el-button-group>

@@ -74,15 +74,6 @@ export default {
         callback();
       }
     };
-    var badReason = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('不能为空'));
-      } else if (value.length > 20) {
-        return callback(new Error('长度不能超过20'));
-      } else {
-        callback();
-      }
-    };
     return {
       tableData: [],
       tableDataPrint: [],
@@ -244,10 +235,6 @@ export default {
           validator: outStorageCode,
           trigger: 'blur'
         }],
-        badReason: [{
-          validator: badReason,
-          trigger: 'blur'
-        }],
       },
       autoheight: 0,
       pickerOptions: {
@@ -365,13 +352,11 @@ export default {
     },
     add() {
       this.draweradd = true
-      this.getOutStorageByCode(null, this.formout.orderId, this.formout.item, true)
+      //this.getOutStorageByCode(null, this.formout.orderId, this.formout.item, true)
     },
     info(row) {
       this.drawerupdate = true
-      this.formoutupdate = { ...row }
-      this.formoutsource = { ...row }
-      this.getOutStorageByCode(null, this.formoutupdate.orderId, this.formoutupdate.item, false)
+      this.formoutupdate = row
     },
     submitForm() {
       this.$refs['formout'].validate((valid) => {
@@ -566,37 +551,41 @@ export default {
         })
     },
     orderCodeChange(orderId) {
-      this.formoutupdate.tempOrderId = this.formoutupdate.orderCode
-      this.$api.order.getById({
-          id: orderId
-        })
-        .then(res => {
-          if (res.data.s == 0) {
-            this.formout.customerName = res.data.rs.customerName
-            this.formout.poNum = res.data.rs.poNum
-            this.formout.item = res.data.rs.item
-            this.formout.count = res.data.rs.count
-            this.formout.orderColor = res.data.rs.color
-            this.formout.orderId = orderId
+      if(orderId!=""&& orderId!=null){
+        this.formoutupdate.tempOrderId = this.formoutupdate.orderCode
+        this.$api.order.getById({
+            id: orderId
+          })
+          .then(res => {
+            console.log("order request finish")
+            if (res.data.s == 0) {
+              this.formout.customerName = res.data.rs.customerName
+              this.formout.poNum = res.data.rs.poNum
+              this.formout.item = res.data.rs.item
+              this.formout.count = res.data.rs.count
+              this.formout.orderColor = res.data.rs.color
+              this.formout.orderId = orderId
 
-            this.formoutupdate.customerNameId = res.data.rs.customerName
-            this.formoutupdate.poNum = res.data.rs.poNum
-            this.formoutupdate.item = res.data.rs.item
-            this.formoutupdate.count = res.data.rs.count
-            this.formoutupdate.orderColorId = res.data.rs.color
+              this.formoutupdate.customerNameId = res.data.rs.customerName
+              this.formoutupdate.poNum = res.data.rs.poNum
+              this.formoutupdate.item = res.data.rs.item
+              this.formoutupdate.count = res.data.rs.count
+              this.formoutupdate.orderColorId = res.data.rs.color
 
-            this.getOutStorageByCode(null, orderId, this.formout.item, true)
-
-          } else {
-            this.$message({
-              showClose: true,
-              message: res.data.rs,
-              type: 'error'
-            });
-          }
-        })
+              this.getOutStorageByCode(null, orderId, this.formout.item, true)
+              console.log("order finish")
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.data.rs,
+                type: 'error'
+              });
+            }
+          })
+      }
     },
     getOutStorageByCode(code, orderId, item, reflash) {
+      console.log("out storage enter")
       this.$api.outStorage.getByCode({
           code: code,
           orderId: orderId,
@@ -604,7 +593,7 @@ export default {
         })
         .then(res => {
           if (res.data.s == 0) {
-            console.log("enter")
+            console.log("out storage request finish",res.data.rs)
             this.outStorageCodeOptions = res.data.rs
             if (reflash) {
               this.formout.outStorageId = null
@@ -618,6 +607,7 @@ export default {
               type: 'error'
             });
           }
+          console.log("out storage finish")
         })
         .catch(function(error) {
           console.log(error)
